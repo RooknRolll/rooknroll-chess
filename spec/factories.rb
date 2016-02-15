@@ -1,4 +1,5 @@
 FactoryGirl.define do
+  
   factory :user do
     sequence :username do |n|
       "tets#{n}"

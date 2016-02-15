@@ -1,6 +1,10 @@
 FactoryGirl.define do
+  factory :game do
+    black_player
+    white_player
+  end
 
-  factory :user, aliases: [:player] do
+  factory :player, aliases: [:black_player, :white_player] do
     sequence :username do |n|
       "tets#{n}"
     end
@@ -14,26 +18,27 @@ FactoryGirl.define do
 
   factory :piece do
     player
+    game
     color 'white'
     x_coordinate 2
     y_coordinate 2
     factory :queen do
-      type 'queen'
+      type 'Queen'
     end
     factory :bishop do
-      type 'bishop'
+      type 'Bishop'
     end
     factory :knight do
-      type 'knight'
+      type 'Knight'
     end
     factory :rook do
-      type 'rook'
+      type 'Rook'
     end
     factory :pawn do
-      type 'pawn'
+      type 'Pawn'
     end
     factory :king do
-      type 'king'
+      type 'King'
     end
   end
 end

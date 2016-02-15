@@ -21,6 +21,12 @@ Things you may want to cover:
 
 * Deployment instructions
 
+* Wireframes
+  Homepage http://imgur.com/RADqwrO
+  Game page http://imgur.com/Ke9g0Ts
+  About page http://imgur.com/6vlhpH6
+  Team page http://imgur.com/7DUQr66
+
 * ...
 
 

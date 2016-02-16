@@ -1,0 +1,27 @@
+<table id="chessboard">
+  <% (0..7).each do |row| %>
+    <tr>
+      <% (0..7).each do |column| %>
+        <% if !row.odd? && !column.odd? %>
+          <td class="black-space">
+            <%# Uncomment for column, row number %>
+            <%#= column %> 
+            <%#= row %>
+          <td/>
+        <% elsif row.odd? && column.odd? %>
+          <td class="black-space">
+            <%# Uncomment for column, row number %>
+            <%#= column %>
+            <%#= row %>
+          <td/>
+        <% else %>
+          <td class="white-space">
+            <%# Uncomment for column, row number %>
+            <%#= column %>
+            <%#= row %>
+          <td/>
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

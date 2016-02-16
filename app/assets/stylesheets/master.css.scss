@@ -1,0 +1,23 @@
+#chessboard {
+  border: 3px solid;
+  margin: 5px;
+  height: 480px;
+  width: 480px;
+  table-layout: fixed;
+}
+
+.white-space {
+  background-color: white;
+  height: 12.5%;
+  width: 12.5%;
+  padding: 0px;
+  margin: 0px;
+}
+
+.black-space {
+  background-color: black;
+  height: 12.5%;
+  width: 12.5%;
+  padding: 0px;
+  margin: 0px;
+}

@@ -25,40 +25,65 @@ class Piece < ActiveRecord::Base
     unless (0..7).cover?(x_move) && (0..7).cover?(y_move)
       raise 'The given coordinates are not on the board'
     end
-    # To test that a move is vertical, horizontal, or diagonal one of three
-    # things should be true: The x_coordinate is unchanged, the y_coordinate is
-    # unchanged, or the absolute change for the x_coordinate equals the absolute
-    # change for the y_coordinate.
-    delta_x = (x_coordinate - x_move).abs
-    delta_y = (y_coordinate - y_move).abs
-    unless delta_x == 0 || delta_y == 0 || delta_x == delta_y
-      raise 'This move is not a valid move for this method to check'
-    end
+    # Using a separate function to test that the move is linear
+    move_is_linear(x_move, y_move)
+    # Set a range of the x values between the current position and the move
+    # position
+    range_x = set_range(x_coordinate, x_move)
+    # Set a range of the y values between the current position and the move
+    # position
+    range_y = set_range(y_coordinate, y_move)
+
     intervening_spaces = []
-    if delta_x > 1
-      range_x = x_coordinate < x_move ? (x_coordinate + 1 .. x_move - 1) :
-                                        (x_move + 1 .. x_coordinate - 1)
-    end
-    if delta_y > 1
-      range_y = y_coordinate < y_move ? (y_coordinate + 1 .. y_move - 1):
-                                        (y_move + 1 .. y_coordinate - 1)
-    end
-    if range_x && range_y
+    # Add to intervening_spaces a list of the coordinates of all the spaces
+    # between the current location and the move location.
+    if range_x.any? && range_y.any?
+      # These next 3 lines run if the move is diagonal
       range_x.each_with_index do |x, index|
         intervening_spaces << [x, range_y.to_a[index]]
       end
-    elsif range_x
+    elsif range_x.any?
+      # This runs if the move is horizontal
       range_x.each { |x| intervening_spaces << [x, y_coordinate] }
-    elsif range_y
+    elsif range_y.any?
+      # This runs if the move is vertical
       range_y.each { |y| intervening_spaces << [x_coordinate, y] }
     end
     intervening_spaces.each do |space_coordinates|
       x = space_coordinates[0]
       y = space_coordinates[1]
+      # For each space between the current location and the move location we
+      # check if a piece exists in that space. If a piece is found return true.
       if game.pieces.where('x_coordinate = ? and y_coordinate = ?', x, y).first
         return true
       end
     end
+    # At this point we have run through all the intervening spaces and have not
+    # found any pieces in them so we return false.
     false
+  end
+
+  private
+
+  def move_is_linear(x_move, y_move)
+    # Move is linear if the x_coordinate does not change, the y_coordinate does
+    # not change, or if the change to the x_coordinate equals the change to
+    # the y_coordinate
+    delta_x = (x_coordinate - x_move).abs
+    delta_y = (y_coordinate - y_move).abs
+    unless delta_x == 0 || delta_y == 0 || delta_x == delta_y
+      raise 'This move is not a valid move for this method to check'
+    end
+    true
+  end
+
+  def set_range(origin, end_place)
+    # This method returns a range of values between the values given it.
+    # Example : set_range(7, 2) => (3..6)
+    if origin < end_place
+      ((origin + 1)..(end_place - 1))
+    else
+      ((end_place + 1)..(origin - 1))
+    end
   end
 end

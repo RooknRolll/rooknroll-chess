@@ -37,6 +37,8 @@ gem 'devise', '>= 3.2.4'
 
 gem 'simple_form'
 
+gem 'rubocop', '~> 0.37.2', require: false
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false

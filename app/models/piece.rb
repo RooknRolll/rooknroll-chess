@@ -12,7 +12,7 @@ class Piece < ActiveRecord::Base
   # Note sure if this is necessary but will leave it here for now.
 
   def self.types
-    #this is an arry of strings with the name of each piece.
+    # this is an arry of strings with the name of each piece.
     %w(Pawn Rook Knight Bishop Queen King)
   end
 

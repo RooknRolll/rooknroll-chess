@@ -37,6 +37,8 @@ gem 'devise', '>= 3.2.4'
 
 gem 'simple_form'
 
+gem 'omniauth-facebook'
+
 gem 'rubocop', '~> 0.37.2', require: false
 
 group :doc do

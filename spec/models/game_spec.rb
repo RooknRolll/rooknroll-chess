@@ -10,4 +10,11 @@ RSpec.describe Game, type: :model do
       expect(Game.with_open_seats).to eq([game1, game2])
     end
   end
+
+  describe "populate_board!" do
+  	it "should populate all the pieces" do
+  	  ng = create(:game)
+      expect(ng.pieces.count).to eq(32)
+  	end
+  end
 end

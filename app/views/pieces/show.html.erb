@@ -3,14 +3,12 @@
     <tr>
       <% (0..7).each do |column| %>
         <% square_color = (row + column).odd? ? 'black' : 'white' %>
-        <% if_chosen_square = chosen == [row, column] ? 'chosen-square' : '' %>
-        <td class="<%= square_color %>-space" id="<%= if_chosen_square %>">
-          <% if piece = @game.pieces.find_by_coordinates(row, column) %>
-          <%# This next line sets the variable equal to 'chosen' if this is  %>
-          <%# the piece that was chosen to move, else sets it to a blank string %>
-          <% chosen = @chosen_piece == piece ? 'chosen' : '' %>
-            <%= link_to piece_path(piece) do %>
-              <span class="<%= piece.glyph %> <%= chosen %>" ></span>
+        <% is_chosen_square = chosen == [row, column] ? 'chosen-square' : '' %>
+          <td class="<%= square_color %>-space" id="<%= is_chosen_square %>">
+            <%= link_to piece_path(@chosen_piece, y_coordinate: row,
+              x_coordinate: column), method: :put, class: 'square' do %>
+            <% if piece = @game.pieces.find_by_coordinates(row, column) %>
+              <span class="<%= piece.glyph %>" ></span>
             <% end %>
           <% end %>
         </td>

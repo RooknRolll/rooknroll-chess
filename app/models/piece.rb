@@ -16,12 +16,20 @@ class Piece < ActiveRecord::Base
     %w(Pawn Rook Knight Bishop Queen King)
   end
 
-  def valid_move?(x_coordinate, y_coordinate)
-
+  def glyph
+    glyph_color = color.downcase
+    glyph_type =
+      case type
+      when 'Rook'
+        'tower'
+      else
+        type.downcase
+      end
+    return "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
   end
 
-  def coordinates
-    [y_coordinate, x_coordinate]
+  def valid_move?(x_coordinate, y_coordinate)
+
   end
 
   def self.find_by_coordinates(row, column)

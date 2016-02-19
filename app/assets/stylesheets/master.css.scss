@@ -21,3 +21,22 @@
   padding: 0px;
   margin: 0px;
 }
+
+// .glyphicon {
+//   font-size:
+// }
+.glyph-black {
+  text-shadow: 0 0 2px white;
+}
+
+.glyph-white {
+  color: #ddd;
+  text-shadow: 0 0 4px black;
+}
+
+.piece {
+  height: 62%;
+  width: 100%;
+  font-size: 30px;
+  text-align: center;
+}

@@ -2,25 +2,12 @@
   <% (0..7).each do |row| %>
     <tr>
       <% (0..7).each do |column| %>
-        <% if !row.odd? && column.odd? %>
-          <td class="black-space">
-            <%# Uncomment for column, row number %>
-            <%#= column %> 
-            <%#= row %>
-          <td/>
-        <% elsif row.odd? && !column.odd? %>
-          <td class="black-space">
-            <%# Uncomment for column, row number %>
-            <%#= column %>
-            <%#= row %>
-          <td/>
-        <% else %>
-          <td class="white-space">
-            <%# Uncomment for column, row number %>
-            <%#= column %>
-            <%#= row %>
-          <td/>
-        <% end %>
+        <% square_color = (row + column).odd? ? 'black' : 'white' %>
+        <td class="<%= square_color %>-space">
+          <% if piece = @game.pieces.find_by_coordinates(row, column) %>
+            <span class="<%= piece.glyph %>" ></span>
+          <% end %>
+        </td>
       <% end %>
     </tr>
   <% end %>

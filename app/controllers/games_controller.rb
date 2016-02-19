@@ -10,6 +10,7 @@ class GamesController < ApplicationController
   end
 
   def show
-
+    @game = Game.find(params[:id])
+    @pieces = @game.pieces.order(:y_coordinate, :x_coordinate)
   end
 end

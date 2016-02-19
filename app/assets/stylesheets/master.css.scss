@@ -6,6 +6,11 @@
   table-layout: fixed;
 }
 
+#chosen-square {
+  box-shadow: 0 0 10px blue;
+  background-color: #F9B71D;
+}
+
 .white-space {
   background-color: white;
   height: 12.5%;
@@ -22,10 +27,17 @@
   margin: 0px;
 }
 
-// .glyphicon {
-//   font-size:
-// }
+.square {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  padding-top: 8px;
+  display: inline-block;
+}
+
 .glyph-black {
+  color: #222;
   text-shadow: 0 0 2px white;
 }
 

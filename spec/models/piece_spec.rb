@@ -4,6 +4,7 @@ RSpec.describe Piece, type: :model do
   describe 'is_obstructed method' do
     before(:each) do
       @game = create(:game)
+      @game.pieces.destroy_all
       @queen = create(:queen, game_id: @game.id)
     end
     it 'raises an error when the move destination is off the board' do

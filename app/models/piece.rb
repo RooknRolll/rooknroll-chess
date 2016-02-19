@@ -17,6 +17,8 @@ class Piece < ActiveRecord::Base
   end
 
   def glyph
+    # Returns classes html classes that create a glyph of the piece with
+    # the correct color.
     glyph_color = color.downcase
     glyph_type =
       case type
@@ -33,6 +35,7 @@ class Piece < ActiveRecord::Base
   end
 
   def self.find_by_coordinates(row, column)
+    # Finds a piece by the given coordinates.
     where(y_coordinate: row, x_coordinate: column).first
   end
 

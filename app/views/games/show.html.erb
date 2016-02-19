@@ -5,7 +5,9 @@
         <% square_color = (row + column).odd? ? 'black' : 'white' %>
         <td class="<%= square_color %>-space">
           <% if piece = @game.pieces.find_by_coordinates(row, column) %>
-            <span class="<%= piece.glyph %>" ></span>
+            <%= link_to piece_path(piece) do %>
+              <span class="<%= piece.glyph %>" ></span>
+            <% end %>
           <% end %>
         </td>
       <% end %>

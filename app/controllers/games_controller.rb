@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   before_action :set_game, only: [:show, :update]
 
   def index
-    
+    @games = Game.all
   end
 
   def new
@@ -18,7 +18,8 @@ class GamesController < ApplicationController
   end
 
   def update
-    @game.black_player_id = current_player
+    @game.update(black_player: current_player)
+    redirect_to game_path(set_game)
   end
 
   private

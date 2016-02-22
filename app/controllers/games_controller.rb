@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   before_action :set_game, only: [:show, :update]
 
   def index
-    @games = Game.all
+    @games = Game.with_open_seats
   end
 
   def new
@@ -19,7 +19,7 @@ class GamesController < ApplicationController
 
   def update
     @game.update(black_player: current_player)
-    redirect_to game_path(set_game)
+    redirect_to action: :show
   end
 
   private

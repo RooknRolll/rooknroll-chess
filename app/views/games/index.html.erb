@@ -1,1 +1,5 @@
-<h1>hi</h1>
+<h1>Games Available To Join</h1>
+
+<% @games.each do |game| %>
+  <%= link_to 'Join Game', game_path(game), method: :put %>
+<% end %>

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Join a Game", type: :request do
-  it "works! (now write some real specs)" do
+  it "should let a player join a game" do
     player = create(:player)
     game = create(:game, black_player_id: nil)
     

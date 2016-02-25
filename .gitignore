@@ -16,4 +16,4 @@
 /tmp
 
 # Ignore .rvmrc
-/.rvmrc
+/.ruby-version

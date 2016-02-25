@@ -11,6 +11,10 @@ class GamesController < ApplicationController
   end
 
   def create
+    @game = Game.new(game_params)
+    @game.white_player_id = current_player.id
+    @game.save
+    redirect_to game_path(@game)
   end
 
   def show
@@ -26,5 +30,9 @@ class GamesController < ApplicationController
 
   def set_game
     @game = Game.find(params[:id])
+  end
+
+  def game_params
+    params.require(:game).permit(:name)
   end
 end

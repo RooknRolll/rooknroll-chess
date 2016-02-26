@@ -2,19 +2,19 @@
 class King < Piece
 	
 
-	def valid_move?
+	def valid_move?(new_x, new_y)
 	  move_logic_is_valid = false
-			if legit_moves.include? [new_x, new_y]
+			if acceptable_moves.include? [new_x, new_y]
 				return true
 			else
 				return false
 			end
 		end
 
-		def legit_moves
+		def acceptable_moves
 			piece = Piece.find(self.id)
-			x_init = piece.x_coord
-			y_init = piece.y_coord
+			x_init = piece.x_coordinate
+			y_init = piece.y_coordinate
 			
 			# list of moves available to King: 
 			up = [x_init, y_init + 1]

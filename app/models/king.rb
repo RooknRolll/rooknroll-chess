@@ -1,5 +1,3 @@
-# Class for King Piece
-require "byebug"
 class King < Piece
   def valid_move?(new_x, new_y)
   	guard_move_is_on_board?(new_x, new_y)

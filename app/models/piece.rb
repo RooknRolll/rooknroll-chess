@@ -30,7 +30,7 @@ class Piece < ActiveRecord::Base
     return "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
   end
 
-  def valid_move?(x_coordinate, y_coordinate)
+  def valid_move?(x_new, y_new)
 
   end
 
@@ -52,6 +52,23 @@ class Piece < ActiveRecord::Base
     # Call spaces_between to get a list of the coordinates of the spaces between
     # current position and the move's position.
     check_for_pieces(spaces_between(range_x, range_y))
+  end
+
+  def move_is_diagonal?(x_move, y_move)
+    delta_x = (x_coordinate - x_move).abs
+    delta_y = (y_coordinate - y_move).abs
+    delta_x == delta_y
+  end
+
+  def move_attacking_own_piece?(x_move, y_move, color)
+    attacked_piece = game.pieces.where(x_coordinate: x_move,
+                                       y_coordinate: y_move).first
+    return false if attacked_piece.nil?
+    attacked_piece.color == color
+  end
+
+  def actual_move?(x_move, y_move)
+    x_move != x_coordinate && y_move != y_coordinate
   end
 
   private

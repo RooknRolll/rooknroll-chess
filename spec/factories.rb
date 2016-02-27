@@ -22,22 +22,22 @@ FactoryGirl.define do
     color 'white'
     x_coordinate 2
     y_coordinate 2
-    factory :queen do
+    factory :queen, class: Queen do
       type 'Queen'
     end
-    factory :bishop do
+    factory :bishop, class: Bishop do
       type 'Bishop'
     end
-    factory :knight do
+    factory :knight, class: Knight do
       type 'Knight'
     end
-    factory :rook do
+    factory :rook, class: Rook do
       type 'Rook'
     end
-    factory :pawn do
+    factory :pawn, class: Pawn do
       type 'Pawn'
     end
-    factory :king do
+    factory :king, class: King do
       type 'King'
     end
   end

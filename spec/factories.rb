@@ -37,8 +37,8 @@ FactoryGirl.define do
     factory :pawn do
       type 'Pawn'
     end
-    factory :king do
-      type 'King'
-    end
+  end
+  factory :king, class: King, parent: :piece do
+  type 'King'
   end
 end

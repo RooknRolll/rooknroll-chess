@@ -41,6 +41,7 @@ gem 'omniauth-facebook'
 
 gem 'rubocop', '~> 0.37.2', require: false
 
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -49,7 +50,10 @@ end
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem "factory_girl_rails", "~> 4.0"
+  gem 'byebug'
 end
+
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'

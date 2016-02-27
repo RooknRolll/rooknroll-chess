@@ -1,45 +1,16 @@
 # Class for King Piece
+require "byebug"
 class King < Piece
   def valid_move?(new_x, new_y)
-    if valid_moves.include? [new_x, new_y]
-      return true
-    else
-      return false
-     end
-    end
+  	guard_move_is_on_board?(new_x, new_y)
+  	return false unless one_space?(x_coordinate, y_coordinate)
+  	piece = Piece.find_by_coordinates(new_x, new_y)
+  	return false unless piece == nil || piece.color != self.color
+  	return true
+  end
 
-  def acceptable_moves
-    piece = Piece.find(id)
-    x_init = piece.x_coordinate
-    y_init = piece.y_coordinate
-
-    # list of moves available to King:
-    up = [x_init, y_init + 1]
-    down = [x_init, y_init - 1]
-    right = [x_init + 1, y_init]
-    left = [x_init - 1, y_init]
-    up_right = [x_init + 1, y_init + 1]
-    up_left = [x_init - 1, y_init + 1]
-    down_right = [x_init + 1, y_init - 1]
-    down_left = [x_init - 1, y_init - 1]
-
-    valid_moves = []
-
-    # King can move only if:
-    can_move_up = y_init != 7
-    can_move_down = y_init != 0
-    can_move_left = x_init != 0
-    can_move_right = x_init != 7
-
-    valid_moves.push(up) if can_move_up
-    valid_moves.push(down) if can_move_down
-    valid_moves.push(left) if can_move_left
-    valid_moves.push(right) if can_move_right
-    valid_moves.push(up_right) if can_move_up && can_move_right
-    valid_moves.push(up_left) if can_move_up && can_move_left
-    valid_moves.push(down_right) if can_move_down && can_move_right
-    valid_moves.push(down_left) if can_move_down && can_move_left
-
-    valid_moves
+  def one_space?(x_coordinate, y_coordinate)
+  	return (x_coordinate + 1 || x_coordinate - 1 || x_coordinate == new_x) &&
+  	       (y_coordinate + 1 || y_coordinate - 1 || y_coordinate == new_y) 	
   end
 end

@@ -30,7 +30,7 @@ class Piece < ActiveRecord::Base
     return "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
   end
 
-  def valid_move?(x_coordinate, y_coordinate)
+  def valid_move?(x_new, y_new)
 
   end
 

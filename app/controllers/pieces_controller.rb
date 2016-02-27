@@ -13,9 +13,9 @@ class PiecesController < ApplicationController
     # Also, since only the Bishop and King currently have the valid_move? method
     # defined movement won't be possible until the method is made for the other
     # pieces.  Remove this comment when you the other pieces are finished.
-    unless @piece.valid_move?(params(:x_coordinate), params(:y_coordinate))
-      return redirect_to :back
-    end
+    x_move = params[:x_coordinate].to_i
+    y_move = params[:y_coordinate].to_i
+    return redirect_to :back unless @piece.valid_move?(x_move, y_move)
     @piece.update(piece_params)
     redirect_to game_path(@piece.game)
   end

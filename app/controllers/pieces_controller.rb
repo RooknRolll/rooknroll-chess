@@ -8,9 +8,14 @@ class PiecesController < ApplicationController
 
   def update
     @piece = Piece.find(params[:id])
-    # We still need to validate the move. Right now you can do pretty much
-    # anything. The validation methods should be written in the model, and
-    # called here.
+    # This unless statement will keep you from making invalid moves. I think
+    # this may break once we revove the interstitial from the movement action.
+    # Also, since only the Bishop and King currently have the valid_move? method
+    # defined movement won't be possible until the method is made for the other
+    # pieces.  Remove this comment when you the other pieces are finished.
+    unless @piece.valid_move?(params(:x_coordinate), params(:y_coordinate))
+      return redirect_to :back
+    end
     @piece.update(piece_params)
     redirect_to game_path(@piece.game)
   end

@@ -54,6 +54,23 @@ class Piece < ActiveRecord::Base
     check_for_pieces(spaces_between(range_x, range_y))
   end
 
+  def move_is_diagonal?(x_move, y_move)
+    delta_x = (x_coordinate - x_move).abs
+    delta_y = (y_coordinate - y_move).abs
+    delta_x == delta_y
+  end
+
+  def move_attacking_own_piece?(x_move, y_move, color)
+    attacked_piece = game.pieces.where(x_coordinate: x_move,
+                                       y_coordinate: y_move).first
+    return false if attacked_piece.nil?
+    attacked_piece.color == color
+  end
+
+  def actual_move?(x_move, y_move)
+    x_move != x_coordinate && y_move != y_coordinate
+  end
+
   private
 
   def check_for_pieces(coordinate_array)

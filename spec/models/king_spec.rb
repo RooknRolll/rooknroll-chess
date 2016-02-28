@@ -11,6 +11,13 @@ RSpec.describe King, type: :model do
         StandardError, 'The given coordinates are not on the board')
         expect(@king.valid_move?(1,2)).to eq true
     end
+    it 'makes sure piece only moves one space' do
+      expect(@king.valid_move?(3,3)).to eq true
+      expect(@king.valid_move?(5,5)).to eq false
+      expect(@king.valid_move?(3,1)).to eq true
+      expect(@king.valid_move?(5,5)).to eq false
+      expect(@king.valid_move?(2,3)).to eq true
+    end
   	
 
   end

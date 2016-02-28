@@ -1,4 +1,10 @@
+
+require 'byebug'
 class King < Piece
+	attr_accessor :new_x, :new_y
+
+ 
+
   def valid_move?(new_x, new_y)
   	guard_move_is_on_board?(new_x, new_y)
   	return false unless one_space?(x_coordinate, y_coordinate)
@@ -8,7 +14,7 @@ class King < Piece
   end
 
   def one_space?(x_coordinate, y_coordinate)
-  	return (x_coordinate + 1 || x_coordinate - 1 || x_coordinate == new_x) &&
-  	       (y_coordinate + 1 || y_coordinate - 1 || y_coordinate == new_y) 	
+  	return (x_coordinate - 1 || x_coordinate + 1 || x_coordinate == new_x) && 
+  	   	   (y_coordinate - 1 || y-coordinate + 1 || y_coordinate == new_y)
   end
 end

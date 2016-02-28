@@ -26,7 +26,7 @@ RSpec.describe Piece, type: :model do
     end
 
     it 'returns false when an unobstructed diagonal move is made' do
-      expect(@queen.is_obstructed?(7, 7)).to eq false
+      expect(@queen.is_obstructed?(7, 7)).to eq false 
     end
 
     it 'returns true when an obstructed horizontal move is made' do

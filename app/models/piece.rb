@@ -36,6 +36,7 @@ class Piece < ActiveRecord::Base
 
   def self.find_by_coordinates(column, row)
     # Finds a piece by the given coordinates.
+    # When you call this method you should narrow the results to a specific game.
     where(y_coordinate: row, x_coordinate: column).first
   end
 

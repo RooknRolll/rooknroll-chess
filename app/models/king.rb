@@ -1,5 +1,3 @@
-
-require 'byebug'
 class King < Piece
 
   def valid_move?(new_x, new_y)

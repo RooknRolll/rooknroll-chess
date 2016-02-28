@@ -1,20 +1,16 @@
 
 require 'byebug'
 class King < Piece
-	attr_accessor :new_x, :new_y
-
- 
 
   def valid_move?(new_x, new_y)
   	guard_move_is_on_board?(new_x, new_y)
-  	return false unless one_space?(x_coordinate, y_coordinate)
+  	return false unless one_space?(new_x, new_y)
   	piece = Piece.find_by_coordinates(new_x, new_y)
   	return false unless piece == nil || piece.color != self.color
   	return true
   end
 
-  def one_space?(x_coordinate, y_coordinate)
-  	return (x_coordinate - 1 || x_coordinate + 1 || x_coordinate == new_x) && 
-  	   	   (y_coordinate - 1 || y-coordinate + 1 || y_coordinate == new_y)
+  def one_space?(new_x, new_y)
+  	return (new_x - x_coordinate).abs <= 1 && (new_y - y_coordinate).abs <= 1
   end
 end

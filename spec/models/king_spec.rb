@@ -17,8 +17,13 @@ RSpec.describe King, type: :model do
       expect(@king.valid_move?(3,1)).to eq true
       expect(@king.valid_move?(5,5)).to eq false
       expect(@king.valid_move?(2,3)).to eq true
+      expect(@king.valid_move?(2,2)).to eq false
     end
-  	
+  	it 'ensures same color piece is not in way' do
+      create(:pawn, x_coordinate: 3, y_coordinate: 3, game_id: @game.id)
+      expect(@king.valid_move?(3,3)).to eq false
+      expect(@king.valid_move?(3,2)).to eq true
+    end
 
   end
 end

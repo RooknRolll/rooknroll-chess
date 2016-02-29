@@ -2,7 +2,7 @@ class King < Piece
   def valid_move?(new_x, new_y)
     guard_move_is_on_board?(new_x, new_y)
     return false unless one_space?(new_x, new_y)
-    piece = Piece.find_by_coordinates(new_x, new_y)
+    piece = game.pieces.find_by_coordinates(new_x, new_y)
     return false unless piece.nil? || piece.color != color
     true
   end

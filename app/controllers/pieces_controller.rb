@@ -15,8 +15,7 @@ class PiecesController < ApplicationController
     # pieces.  Remove this comment when you the other pieces are finished.
     x_move = params[:x_coordinate].to_i
     y_move = params[:y_coordinate].to_i
-    return redirect_to :back unless @piece.valid_move?(x_move, y_move)
-    @piece.update(piece_params)
+    return redirect_to :back unless @piece.move(x_move, y_move)
     redirect_to game_path(@piece.game)
   end
 

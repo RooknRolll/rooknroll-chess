@@ -30,6 +30,18 @@ class Piece < ActiveRecord::Base
     return "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
   end
 
+  def move(x_new, y_new)
+    if valid_move?(x_new, y_new)
+      captured_piece = game.pieces.find_by_coordinates(x_new, y_new)
+      if captured_piece
+        captured_piece.destroy
+      end
+      update_attributes(x_coordinate: x_new, y_coordinate: y_new)
+      return true if save
+    end
+    false
+  end
+
   def valid_move?(x_new, y_new)
 
   end

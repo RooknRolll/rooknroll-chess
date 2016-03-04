@@ -30,8 +30,24 @@ class Piece < ActiveRecord::Base
     return "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
   end
 
-  def valid_move?(x_new, y_new)
+  def move(x_new, y_new)
+    if valid_move?(x_new, y_new)
+      captured_piece = game.pieces.find_by_coordinates(x_new, y_new)
+      # This next line checks that a captured piece exists and destroys it.
+      captured_piece && captured_piece.destroy
+      update_attributes(x_coordinate: x_new, y_coordinate: y_new)
+      return true if save
+    end
+    false
+  end
 
+  def valid_move?(x_new, y_new)
+    # I pulled out the portions of the valid move method that all piece types
+    # should be calling, and placed them here. Check the bishop model to see
+    # how to call it.
+    return false unless actual_move?(x_new, y_new)
+    return false if move_attacking_own_piece?(x_new, y_new, color)
+    true
   end
 
   def self.find_by_coordinates(column, row)

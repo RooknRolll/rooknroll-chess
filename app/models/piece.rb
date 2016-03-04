@@ -43,7 +43,12 @@ class Piece < ActiveRecord::Base
   end
 
   def valid_move?(x_new, y_new)
-
+    # I pulled out the portions of the valid move method that all piece types
+    # should be calling, and placed them here. Check the bishop model to see
+    # how to call it.
+    return false unless actual_move?(x_new, y_new)
+    return false if move_attacking_own_piece?(x_new, y_new, color)
+    true
   end
 
   def self.find_by_coordinates(column, row)

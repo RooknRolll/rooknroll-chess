@@ -6,19 +6,28 @@ class Pawn < Piece
     move_x = (x_new - self.x_coordinate).abs
     # # Need to know sign of y to avoid backward move
     move_y = (y_new - self.y_coordinate)
-    return false if self.color == 'White' && (move_y <= 0)
-    return false if self.color == 'Black' && (move_y >= 0)
-    # Allow a first move of 2 spaces
-    unless self.color == 'White' && self.y_coordinate == 1
-      return false if move_y == 2
+    # White Pawn moves
+    if self.color == 'White'
+      return false if move_y <= 0
+      if self.y_coordinate == 1
+        return false unless move_y <= 2
+      else
+        return false unless move_y <= 1
+      end
     end
-    unless self.color == 'Black' && self.y_coordinate == 6 
-      return false if move_y == -2
+    # Black Pawn moves
+    if self.color == 'Black'
+      return false if move_y >= 0
+      if self.y_coordinate == 6 
+        return false unless move_y >= -2
+      else
+        return false unless move_y >= -1
+      end
     end
-    # Diagonal moves for capturing moves only
-    # if move_x > 0
-    #   return false unless move_x == 1 && move_to!
-    # end
+    # Diagonal moves for capturing opponents only
+    if move_x > 0
+      return false unless move_x == 1 && is_obstructed?(x_new, y_new)
+    end
     true
   end
 end

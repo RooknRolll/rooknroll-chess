@@ -35,6 +35,11 @@ RSpec.describe Pawn, type: :model do
         @pawn.y_coordinate = 2
         expect(@pawn.valid_move?(0, 4)).to eq(false)
       end
+
+      it 'returns false for a move forward 3 spaces' do
+        @pawn.y_coordinate = 2
+        expect(@pawn.valid_move?(0, 5)).to eq(false)
+      end
     end
 
     context 'a valid move' do
@@ -46,10 +51,10 @@ RSpec.describe Pawn, type: :model do
         expect(@pawn.valid_move?(0, 3)).to eq(true)
       end
 
-      # it 'returns true for a 1 forward, diagonal move to an opponent space' do
-      #   create(:knight, x_coordinate: 1, y_coordinate: 2, color: 'Black')
-      #   expect(@pawn.valid_move?(1, 2))
-      # end
+      it 'returns true for a 1 forward, diagonal move to an opponent space' do
+        create(:knight, x_coordinate: 1, y_coordinate: 2, color: 'Black')
+        expect(@pawn.valid_move?(1, 2))
+      end
     end
   end
 end

@@ -22,6 +22,7 @@ FactoryGirl.define do
     color 'white'
     x_coordinate 2
     y_coordinate 2
+    moved false
     factory :queen, class: Queen do
       type 'Queen'
     end

@@ -35,7 +35,7 @@ class Piece < ActiveRecord::Base
       captured_piece = game.pieces.find_by_coordinates(x_new, y_new)
       # This next line checks that a captured piece exists and destroys it.
       captured_piece && captured_piece.destroy
-      update_attributes(x_coordinate: x_new, y_coordinate: y_new)
+      update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
       return true if save
     end
     false

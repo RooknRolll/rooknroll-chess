@@ -68,6 +68,12 @@ RSpec.describe Piece, type: :model do
       expect(@bishop.x_coordinate).to eq 2
       expect(@bishop.y_coordinate).to eq 2
     end
+
+    it 'changes the moved attribute to true' do
+      @bishop.move(5, 5)
+      @bishop.reload
+      expect(@bishop.moved).to be true
+    end
   end
 
   describe 'capturing another piece' do

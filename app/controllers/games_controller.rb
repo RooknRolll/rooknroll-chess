@@ -3,7 +3,7 @@ class GamesController < ApplicationController
   before_action :set_game, only: [:show, :update]
 
   def index
-    @games = Game.with_open_seats
+    @opengames = Game.with_open_seats
   end
 
   def new

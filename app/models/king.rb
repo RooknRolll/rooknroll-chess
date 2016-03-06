@@ -41,5 +41,6 @@ class King < Piece
     update_attributes(x_coordinate: king_x, moved: true)
     # Move the rook.
     rook.update_attributes(x_coordinate: rook_move, moved: true)
+    return true if rook.save && save
   end
 end

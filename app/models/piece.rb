@@ -31,6 +31,7 @@ class Piece < ActiveRecord::Base
   end
 
   def move(x_new, y_new)
+    return castle!(x_new, y_new) if castling_move?(x_new, y_new)
     if valid_move?(x_new, y_new)
       captured_piece = game.pieces.find_by_coordinates(x_new, y_new)
       # This next line checks that a captured piece exists and destroys it.
@@ -89,6 +90,14 @@ class Piece < ActiveRecord::Base
   end
 
   private
+
+  def castling_move?(x_move, y_move)
+    # First, moving piece must be a king.
+    return false unless type == 'King'
+    # Second, king must be able to castle with given coordinates
+    return false unless can_castle?(x_move, y_move)
+    true
+  end
 
   def check_for_pieces(coordinate_array)
     # Given an array of coordinates in the form of arrays containing two numbers

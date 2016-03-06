@@ -128,7 +128,7 @@ class Piece < ActiveRecord::Base
     delta_x = (x_coordinate - x_move).abs
     delta_y = (y_coordinate - y_move).abs
     unless delta_x == 0 || delta_y == 0
-      raise 'This move is not allowed'
+      return false
     end
     true
   end

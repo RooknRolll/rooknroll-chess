@@ -12,6 +12,15 @@ RSpec.describe GamesController, type: :controller do
        get :index
        expect(response).to have_http_status(:success)
     end
+
+    it "should show all open games on page" do
+       # @opengames should not be causing errors 
+       opengames = create(:game, black_player_id: nil)
+       if opengames.present?
+        get :index
+       end
+       expect(response). to have_http_status(:success)
+    end
   end
 
   describe 'games#create action' do

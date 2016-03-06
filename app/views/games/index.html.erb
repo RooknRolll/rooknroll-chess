@@ -1,5 +1,7 @@
 <h1>Games Available To Join</h1>
 
-<% @games.each do |game| %>
+<% if @opengames.present? %>
+  <%= @opengames.each do |game| %>
   <%= link_to 'Join Game', game_path(game), method: :put %>
+  <% end %>
 <% end %>

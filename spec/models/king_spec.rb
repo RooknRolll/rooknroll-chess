@@ -93,4 +93,32 @@ RSpec.describe King, type: :model do
       end
     end
   end
+
+  describe '#castle!' do
+    before(:each) do
+      @game = create(:game)
+      @game.pieces.destroy_all
+      @king = create(:king, game_id: @game.id, x_coordinate: 3, y_coordinate: 0)
+      @king_side_rook = create(:rook, game_id: @game.id, x_coordinate: 0,
+                                      y_coordinate: 0)
+      @queen_side_rook = create(:rook, game_id: @game.id, x_coordinate: 7,
+                                       y_coordinate: 0)
+    end
+    it 'moves the the king to the correct place on a king side castle' do
+      @king.castle!(0, 0)
+      @king.reload
+      @king_side_rook.reload
+      expect(@king.x_coordinate).to eq 1
+      expect(@king_side_rook.x_coordinate).to eq 2
+    end
+
+    it 'moves the the king and rook to the correct place on a queen side
+     castle' do
+      @king.castle!(7, 0)
+      @king.reload
+      @queen_side_rook.reload
+      expect(@king.x_coordinate).to eq 5
+      expect(@queen_side_rook.x_coordinate).to eq 4
+    end
+  end
 end

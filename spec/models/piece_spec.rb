@@ -87,6 +87,7 @@ RSpec.describe Piece, type: :model do
     end
   end
 
+
   describe 'capturing another piece' do
     before(:each) do
       @game = create(:game)

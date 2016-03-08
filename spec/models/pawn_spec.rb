@@ -42,7 +42,7 @@ RSpec.describe Pawn, type: :model do
       end
 
       it 'returns false for a move forward 2 spaces when not the first move' do
-        @pawn.y_coordinate = 2
+        @pawn.move(0, 2)
         expect(@pawn.valid_move?(0, 4)).to eq(false)
       end
 

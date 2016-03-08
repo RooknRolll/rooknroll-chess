@@ -30,9 +30,7 @@ class Pawn < Piece
   end
 
   def first_move?
-    return true if color == 'White' && y_coordinate == 1
-    return true if color == 'Black' && y_coordinate == 6
-    false
+    !moved
   end
 
   def space_occupied?(x_new, y_new)

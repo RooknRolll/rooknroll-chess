@@ -2,12 +2,13 @@
 class Pawn < Piece
   def valid_move?(x_new, y_new)
     return false if guard_move_is_on_board?(x_new, y_new)
+    return false if is_obstructed?(x_new, y_new)
     return false if move_attacking_own_piece?(x_new, y_new, color)
     return false unless forward_move?(y_new)
     move_y = move_y(y_new)
     move_x = move_x(x_new)
     return false unless (first_move? && move_y.abs <= 2) || move_y.abs <= 1
-    if obstructed?(x_new, y_new) || move_x != 0
+    if space_occupied?(x_new, y_new) || move_x != 0
       return false unless attack?(x_new, y_new)
     end
     true
@@ -35,7 +36,7 @@ class Pawn < Piece
     false
   end
 
-  def obstructed?(x_new, y_new)
+  def space_occupied?(x_new, y_new)
     game.pieces.where(x_coordinate: x_new, y_coordinate: y_new).first
   end
 
@@ -43,7 +44,7 @@ class Pawn < Piece
     move_x = move_x(x_new)
     move_y = move_y(y_new).abs
     return false unless move_x == 1 && move_y == 1
-    return false unless obstructed?(x_new, y_new)
+    return false unless space_occupied?(x_new, y_new)
     return false if move_attacking_own_piece?(x_new, y_new, color)
     true
   end

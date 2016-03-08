@@ -28,6 +28,11 @@ RSpec.describe Pawn, type: :model do
         expect(@pawn.valid_move?(0, 2)).to eq(false)
       end
 
+      it 'returns false when attempting a 2 space move over another piece' do
+        create(:knight, x_coordinate: 0, y_coordinate: 2, game_id: @game.id, color: 'Black')
+        expect(@pawn.valid_move?(0, 3)).to eq(false)
+      end
+
       it 'returns false for a move 1 right, 0 forward' do
         expect(@pawn.valid_move?(1, 1)).to eq(false)
       end

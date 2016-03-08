@@ -1,7 +1,6 @@
 # Class for Pawn Piece
 class Pawn < Piece
   def valid_move?(x_new, y_new)
-    return false if guard_move_is_on_board?(x_new, y_new) == false
     return false if is_obstructed?(x_new, y_new)
     return false if move_attacking_own_piece?(x_new, y_new, color)
     return false unless forward_move?(y_new)

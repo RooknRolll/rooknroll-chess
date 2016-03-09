@@ -17,4 +17,10 @@ RSpec.describe Game, type: :model do
       expect(ng.pieces.count).to eq(32)
   	end
   end
+
+  describe "check?" do
+    it 'should return false if the King is not in check' do
+      false
+    end
+  end
 end

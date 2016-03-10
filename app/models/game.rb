@@ -51,7 +51,12 @@ class Game < ActiveRecord::Base
     pieces.create(:type => 'Rook', :color => "White", :x_coordinate => 7, :y_coordinate => 0)
   end
 
-  def check?
-    false
+  def check?(king, piece)
+    if king.color != piece.color && piece.valid_move?(king.x_coordinate, king.y_coordinate)
+      # Message to display: The piece.color piece.type has your King in check!
+      true
+    else
+      false
+    end
   end
 end

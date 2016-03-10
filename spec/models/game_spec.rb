@@ -28,12 +28,14 @@ RSpec.describe Game, type: :model do
     context 'Pawn' do
       it 'should return true if the opponent Pawn can capture the King' do
         @pawn = create(:pawn, game_id: @game.id, x_coordinate: 3, y_coordinate: 1, color: 'Black')
+        expect(@game.check?(@king, @pawn)).to eq true
       end
     end
 
     context 'Knight' do
       it 'should return true if the opponent Knight can capture the King' do
         @knight = create(:knight, game_id: @game.id, x_coordinate: 3, y_coordinate: 2, color: 'Black')
+        expect(@game.check?(@king, @knight)).to eq true
       end
     end
 
@@ -43,10 +45,12 @@ RSpec.describe Game, type: :model do
       end
 
       it 'should return true if the opponent Rook can capture the King' do
+        expect(@game.check?(@king, @rook)).to eq true
       end
 
       it 'should return false if the Rook is blocked by another piece' do
         @pawn = create(:pawn, game_id: @game.id, x_coordinate: 4, y_coordinate: 1, color: 'White')
+        expect(@game.check?(@king, @rook)).to eq false
       end
     end
 
@@ -56,24 +60,27 @@ RSpec.describe Game, type: :model do
       end
 
       it 'should return true if the opponent Bishop can capture the King' do
+        expect(@game.check?(@king, @bishop)).to eq true
       end
 
       it 'should return false if the Bishop is blocked by another piece' do
         @pawn = create(:pawn, game_id: @game.id, x_coordinate: 3, y_coordinate: 1, color: 'White')
+        expect(@game.check?(@king, @bishop)).to eq false
       end
     end
 
-    context 'Queen' do
-      before(:each) do
-        @queen = create(:queen, game_id: @game.id, x_coordinate: 2, y_coordinate: 2, color: 'Black')
-      end
+    # context 'Queen' do
+    #   before(:each) do
+    #     @queen = create(:queen, game_id: @game.id, x_coordinate: 2, y_coordinate: 2, color: 'Black')
+    #   end
 
-      it 'should return true if the opponent Queen can capture the King' do
-      end
+    #   it 'should return true if the opponent Queen can capture the King' do
+    #     expect(@game.check?(@king, @queen)).to eq true
+    #   end
 
-      it 'should return false if the Queen is blocked by another piece' do
-        @pawn = create(:pawn, game_id: @game.id, x_coordinate: 3, y_coordinate: 1, color: 'White')
-      end
-    end
+    #   it 'should return false if the Queen is blocked by another piece' do
+    #     @pawn = create(:pawn, game_id: @game.id, x_coordinate: 3, y_coordinate: 1, color: 'White')
+    #   end
+    # end
   end
 end

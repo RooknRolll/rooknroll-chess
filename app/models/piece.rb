@@ -38,6 +38,9 @@ class Piece < ActiveRecord::Base
       # This next line checks that a captured piece exists and destroys it.
       captured_piece && captured_piece.destroy
       update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
+      # destroy all enpassants on the other side to prevent them from being
+      # valid moves in subsequent turns
+      game.en_passants.color(opposite_color).destroy_all
       return true if save
     end
     false
@@ -49,7 +52,7 @@ class Piece < ActiveRecord::Base
     elsif color == 'Black'
       'White'
     else
-      raise 'Invalid color given'
+      raise 'not a valid color'
     end
   end
 

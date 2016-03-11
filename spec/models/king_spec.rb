@@ -121,4 +121,17 @@ RSpec.describe King, type: :model do
       expect(@queen_side_rook.x_coordinate).to eq 4
     end
   end
+
+  # describe 'move_into_check?' do
+  #   before(:each) do
+  #     @game = create(:game)
+  #     @game.pieces.destroy_all
+  #     @king = create(:king, game_id: @game.id, x_coordinate: 4, y_coordinate: 0, color: 'White')
+  #   end
+
+  #   it 'should return true if a move by the King would put it in check' do
+  #     @rook = create(:rook, game_id: @game.id, x_coordinate: 3, y_coordinate: 2, color: 'Black')
+  #     expect(@king.move_into_check?(3, 0)).to eq true
+  #   end
+  # end
 end

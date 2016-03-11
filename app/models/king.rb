@@ -43,4 +43,8 @@ class King < Piece
     rook.update_attributes(x_coordinate: rook_move, moved: true)
     return true if rook.save && save
   end
+
+  def move_into_check?(x_new, y_new)
+
+  end
 end

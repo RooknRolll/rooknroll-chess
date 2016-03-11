@@ -6,25 +6,33 @@ RSpec.describe King, type: :model do
       @game.pieces.destroy_all
       @king = create(:king, game_id: @game.id)
     end
-  	it 'makes sure move is on chess board' do
+  	
+    it 'makes sure move is on chess board' do
   		expect { @king.valid_move?(9,11)}.to raise_error(
         StandardError, 'The given coordinates are not on the board')
         expect(@king.valid_move?(1,2)).to eq true
     end
+    
     it 'makes sure piece only moves one space' do
       expect(@king.valid_move?(3,3)).to eq true
       expect(@king.valid_move?(5,5)).to eq false
-      expect(@king.valid_move?(3,1)).to eq true
+      expect(@king.valid_move?(3,2)).to eq true
       expect(@king.valid_move?(5,5)).to eq false
       expect(@king.valid_move?(2,3)).to eq true
       expect(@king.valid_move?(2,2)).to eq false
     end
-  	it 'ensures same color piece is not in way' do
+  	
+    it 'ensures same color piece is not in way' do
       create(:pawn, x_coordinate: 3, y_coordinate: 3, game_id: @game.id)
       expect(@king.valid_move?(3,3)).to eq false
       expect(@king.valid_move?(3,2)).to eq true
     end
 
+    it 'should return false for a move into check' do
+      @king.move(4, 0)
+      @rook = create(:rook, game_id: @game.id, x_coordinate: 5, y_coordinate: 2, color: 'Black')
+      expect(@king.valid_move?(5, 0)).to eq false
+    end
   end
 
   describe '#can_castle?' do
@@ -122,16 +130,21 @@ RSpec.describe King, type: :model do
     end
   end
 
-  # describe 'move_into_check?' do
-  #   before(:each) do
-  #     @game = create(:game)
-  #     @game.pieces.destroy_all
-  #     @king = create(:king, game_id: @game.id, x_coordinate: 4, y_coordinate: 0, color: 'White')
-  #   end
+  describe 'move_into_check?' do
+    before(:each) do
+      @game = create(:game)
+      @game.pieces.destroy_all
+      @king = create(:king, game_id: @game.id, x_coordinate: 4, y_coordinate: 0, color: 'White')
+    end
 
-  #   it 'should return true if a move by the King would put it in check' do
-  #     @rook = create(:rook, game_id: @game.id, x_coordinate: 3, y_coordinate: 2, color: 'Black')
-  #     expect(@king.move_into_check?(3, 0)).to eq true
-  #   end
-  # end
+    it 'should return true if a move by the King would put it in check' do
+      @rook = create(:rook, game_id: @game.id, x_coordinate: 5, y_coordinate: 2, color: 'Black')
+      expect(@king.move_into_check?(5, 0)).to eq true
+    end
+
+    it 'should return false if a move by the King would not put it in check' do
+      @pawn = create(:pawn, game_id: @game.id, x_coordinate: 5, y_coordinate: 3, color: 'Black')
+      expect(@king.move_into_check?(5, 0)).to eq false
+    end
+  end
 end

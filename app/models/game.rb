@@ -53,7 +53,7 @@ class Game < ActiveRecord::Base
   end
 
   def check?(king)
-    opponents = pieces.where(color: "#{king.opposite_color}")
+    opponents = pieces.where(color: king.opposite_color)
     opponents.any? do |piece|
       piece.valid_move?(king.x_coordinate, king.y_coordinate)
     end

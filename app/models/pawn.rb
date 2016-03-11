@@ -14,11 +14,13 @@ class Pawn < Piece
   end
 
   def move(x_new, y_new)
+    return false unless valid_move?(x_new, y_new)
     move_y = move_y(y_new).abs
     move_x = move_x(x_new)
     create_en_passant if two_spaces_forward?(move_x, move_y)
     attack_any_en_passant(x_new, y_new)
-    super
+    update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
+    destroy_en_passants
   end
 
   def forward_move?(y_new)

@@ -90,4 +90,25 @@ RSpec.describe Pawn, type: :model do
         .not_to be nil
     end
   end
+
+  describe 'when capturing' do
+    before(:each) do
+      @game = create(:game)
+      @black_pawn = @game.pieces.find_by_coordinates(3, 6)
+      @white_pawn = @game.pieces.find_by_coordinates(4, 1)
+      @white_pawn.move(4, 3)
+      @black_pawn.move(3, 4)
+    end
+    it 'moves the piece to the place where the capture occurs' do
+      @black_pawn.move(4, 3)
+      @black_pawn.reload
+      expect(@game.pieces.find_by_coordinates(4, 3).id).to eq @black_pawn.id
+    end
+
+    it 'destroys the captured piece' do
+      white_pawn_id = @white_pawn.id
+      @black_pawn.move(4, 3)
+      expect(Piece.find_by_id(white_pawn_id)).to be nil
+    end
+  end
 end

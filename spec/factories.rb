@@ -1,4 +1,8 @@
 FactoryGirl.define do
+
+  factory :en_passant do
+  end
+
   factory :game do
     black_player
     white_player

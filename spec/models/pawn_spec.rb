@@ -67,4 +67,16 @@ RSpec.describe Pawn, type: :model do
       end
     end
   end
+
+  describe 'when a double forward move is made' do
+    before(:each) do
+      @game = create(:game)
+      @pawn = @game.pawns.find_by_coordinates(2, 1)
+    end
+    it 'creates an en passant in the square behind the pawn' do
+      @pawn.move(2, 3)
+      expect(@pawn.en_passants.where(x_coordinate: 2, y_coordinate: 2).first)
+        .not_to be nil
+    end
+  end
 end

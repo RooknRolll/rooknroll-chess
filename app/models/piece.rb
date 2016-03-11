@@ -1,12 +1,12 @@
 class Piece < ActiveRecord::Base
   belongs_to :player
   belongs_to :game
-  scope :bishops, -> { where(type: ‘Bishop’) }
-  scope :kings, -> { where(type: ‘King’) }
-  scope :knights, -> { where(type: ‘Knight’) }
-  scope :pawns, -> { where(type: ‘Pawn’) }
-  scope :queens, -> { where(type: ‘Queen’) }
-  scope :rooks, -> { where(type: ‘Rook’) }
+  scope :bishops, -> { where(type: 'Bishop') }
+  scope :kings, -> { where(type: 'King') }
+  scope :knights, -> { where(type: 'Knight') }
+  scope :pawns, -> { where(type: 'Pawn') }
+  scope :queens, -> { where(type: 'Queen') }
+  scope :rooks, -> { where(type: 'Rook') }
   # Adding scope allow calling methods like, Piece.kings, Piece.pawns, Piece.rooks
   # Piece.all, King.all, Pawn.all, Rook.all
   # Note sure if this is necessary but will leave it here for now.
@@ -40,6 +40,16 @@ class Piece < ActiveRecord::Base
       return true if save
     end
     false
+  end
+
+  def opposite_color
+    if color == 'White'
+      'Black'
+    elsif color == 'Black'
+      'White'
+    else
+      raise 'Invalid color given'
+    end
   end
 
   def valid_move?(x_new, y_new)

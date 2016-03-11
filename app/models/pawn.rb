@@ -1,7 +1,5 @@
 # Class for Pawn Piece
 class Pawn < Piece
-  has_many :en_passants, dependent: :destroy
-
   def valid_move?(x_new, y_new)
     return false if is_obstructed?(x_new, y_new)
     return false if move_attacking_own_piece?(x_new, y_new, color)
@@ -67,8 +65,9 @@ class Pawn < Piece
 
   def create_en_passant
     y = color == 'White' ? 2 : 5
-    en_passants.create(x_coordinate: x_coordinate,
+    e = en_passants.create(x_coordinate: x_coordinate,
                        y_coordinate: y,
-                       color: color)
+                       color: color,
+                       game_id: game.id)
   end
 end

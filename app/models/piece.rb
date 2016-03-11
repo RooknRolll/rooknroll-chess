@@ -1,6 +1,7 @@
 class Piece < ActiveRecord::Base
   belongs_to :player
   belongs_to :game
+  has_many :en_passants, dependent: :destroy
   scope :bishops, -> { where(type: 'Bishop') }
   scope :kings, -> { where(type: 'King') }
   scope :knights, -> { where(type: 'Knight') }

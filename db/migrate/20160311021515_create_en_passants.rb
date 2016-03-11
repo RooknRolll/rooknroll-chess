@@ -4,7 +4,7 @@ class CreateEnPassants < ActiveRecord::Migration
       t.integer :x_coordinate
       t.integer :y_coordinate
       t.string :color
-      t.integer :pawn_id
+      t.integer :piece_id
       t.timestamps
     end
   end

@@ -1,12 +1,13 @@
 class Piece < ActiveRecord::Base
   belongs_to :player
   belongs_to :game
-  scope :bishops, -> { where(type: ‘Bishop’) }
-  scope :kings, -> { where(type: ‘King’) }
-  scope :knights, -> { where(type: ‘Knight’) }
-  scope :pawns, -> { where(type: ‘Pawn’) }
-  scope :queens, -> { where(type: ‘Queen’) }
-  scope :rooks, -> { where(type: ‘Rook’) }
+  has_many :en_passants, dependent: :destroy
+  scope :bishops, -> { where(type: 'Bishop') }
+  scope :kings, -> { where(type: 'King') }
+  scope :knights, -> { where(type: 'Knight') }
+  scope :pawns, -> { where(type: 'Pawn') }
+  scope :queens, -> { where(type: 'Queen') }
+  scope :rooks, -> { where(type: 'Rook') }
   # Adding scope allow calling methods like, Piece.kings, Piece.pawns, Piece.rooks
   # Piece.all, King.all, Pawn.all, Rook.all
   # Note sure if this is necessary but will leave it here for now.
@@ -33,13 +34,30 @@ class Piece < ActiveRecord::Base
   def move(x_new, y_new)
     return castle!(x_new, y_new) if castling_move?(x_new, y_new)
     if valid_move?(x_new, y_new)
-      captured_piece = game.pieces.find_by_coordinates(x_new, y_new)
-      # This next line checks that a captured piece exists and destroys it.
-      captured_piece && captured_piece.destroy
+      find_and_capture(x_new, y_new)
       update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
+      # destroy all enpassants on the other side to prevent them from being
+      # valid moves in subsequent turns
+      destroy_en_passants
       return true if save
     end
     false
+  end
+
+  def find_and_capture(x, y)
+    captured_piece = game.pieces.find_by_coordinates(x, y)
+    # This next line checks that a captured piece exists and destroys it.
+    captured_piece && captured_piece.destroy
+  end
+
+  def opposite_color
+    if color == 'White'
+      'Black'
+    elsif color == 'Black'
+      'White'
+    else
+      raise 'not a valid color'
+    end
   end
 
   def valid_move?(x_new, y_new)
@@ -88,6 +106,10 @@ class Piece < ActiveRecord::Base
 
   def actual_move?(x_move, y_move)
     x_move != x_coordinate && y_move != y_coordinate
+  end
+
+  def destroy_en_passants
+    game.en_passants.color(opposite_color).destroy_all
   end
 
   private

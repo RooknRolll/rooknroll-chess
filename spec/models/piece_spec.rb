@@ -85,6 +85,16 @@ RSpec.describe Piece, type: :model do
       expect(@king.x_coordinate).to eq 5
       expect(@rook.x_coordinate).to eq 4
     end
+
+    it 'destroys all en passants of the opposite color so that en passants are \
+        only valid for one turn' do
+      @game = create(:game)
+      @white_pawn = @game.pieces.find_by_coordinates(3, 1)
+      @black_knight = @game.pieces.find_by_coordinates(1, 7)
+      @white_pawn.move(3, 3)
+      @black_knight.move(2, 5)
+      expect(@game.en_passants).to be_empty
+    end
   end
 
 

@@ -1,4 +1,8 @@
 FactoryGirl.define do
+
+  factory :en_passant do
+  end
+
   factory :game do
     black_player
     white_player
@@ -19,7 +23,7 @@ FactoryGirl.define do
   factory :piece do
     player
     game_id { FactoryGirl.create(:game).id }
-    color 'white'
+    color 'White'
     x_coordinate 2
     y_coordinate 2
     moved false

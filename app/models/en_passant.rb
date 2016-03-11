@@ -7,5 +7,6 @@ class EnPassant < ActiveRecord::Base
   end
 
   def capture
+    piece.destroy if piece.type = 'Pawn'
   end
 end

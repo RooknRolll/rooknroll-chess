@@ -17,6 +17,7 @@ class Pawn < Piece
     move_y = move_y(y_new).abs
     move_x = move_x(x_new)
     create_en_passant if two_spaces_forward?(move_x, move_y)
+    attack_any_en_passant(x_new, y_new)
     super
   end
 
@@ -65,9 +66,14 @@ class Pawn < Piece
 
   def create_en_passant
     y = color == 'White' ? 2 : 5
-    e = en_passants.create(x_coordinate: x_coordinate,
+    en_passants.create(x_coordinate: x_coordinate,
                        y_coordinate: y,
                        color: color,
                        game_id: game.id)
+  end
+
+  def attack_any_en_passant(x, y)
+    en_passant = game.en_passants.find_by_coordinates(x, y)
+    en_passant && en_passant.capture
   end
 end

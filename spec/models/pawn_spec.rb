@@ -71,6 +71,7 @@ RSpec.describe Pawn, type: :model do
                                    x_coordinate: 1,
                                    y_coordinate: 6,
                                    game_id: @game.id)
+
         @pawn.update_attributes(y_coordinate: 4, moved: true)
         black_pawn.move(1, 4)
         expect(@pawn.valid_move?(1, 5)).to be true

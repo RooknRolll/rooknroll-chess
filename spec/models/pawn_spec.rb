@@ -19,7 +19,7 @@ RSpec.describe Pawn, type: :model do
       end
 
       it 'returns false for far away, non-linear moves' do
-        expect(@pawn.valid_move(2, 7)).to be false
+        expect(@pawn.valid_move?(2, 7)).to be false
       end
 
       it 'returns false if a same color piece is in the destination' do

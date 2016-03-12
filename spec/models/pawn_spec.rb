@@ -18,6 +18,10 @@ RSpec.describe Pawn, type: :model do
         expect(@pawn.valid_move?(0, 1)).to eq(false)
       end
 
+      it 'returns false for far away, non-linear moves' do
+        expect(@pawn.valid_move(2, 7)).to be false
+      end
+
       it 'returns false if a same color piece is in the destination' do
         create(:knight, x_coordinate: 0, y_coordinate: 2, game_id: @game.id, color: 'White')
         expect(@pawn.valid_move?(0, 2)).to eq(false)

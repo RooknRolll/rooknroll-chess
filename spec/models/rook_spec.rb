@@ -9,11 +9,9 @@ RSpec.describe Rook, type: :model do
                                 game_id: @game.id)
     end
 
-    it 'returns error for a proposed move that is not parallel to boards edge' do
-      expect { @rook.valid_move?(1, 3) }.to raise_error(
-        StandardError, 'This move is not allowed')
-      expect { @rook.valid_move?(4, 4 ) }.to raise_error(
-        StandardError, 'This move is not allowed')
+    it 'returns false for a proposed move that is not parallel to boards edge' do
+      expect(@rook.valid_move?(1, 3)).to be false
+      expect(@rook.valid_move?(4, 4)).to be false
     end
 
     it 'returns false for move to spot piece already occupies' do
@@ -38,11 +36,3 @@ RSpec.describe Rook, type: :model do
     end
   end
 end
-
-  
-
-
-  
-   
-  
-

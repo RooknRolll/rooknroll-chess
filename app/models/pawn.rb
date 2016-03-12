@@ -1,16 +1,16 @@
 # Class for Pawn Piece
 class Pawn < Piece
   def valid_move?(x_new, y_new)
-    return false if is_obstructed?(x_new, y_new)
     return false if move_attacking_own_piece?(x_new, y_new, color)
     return false unless forward_move?(y_new)
     move_y = move_y(y_new)
     move_x = move_x(x_new)
     occupied ||= space_occupied?(x_new, y_new)
 
-    return (one_space_forward?(move_x, move_y.abs) && !occupied) ||
+    ((one_space_forward?(move_x, move_y.abs) && !occupied) ||
       (two_spaces_forward?(move_x, move_y.abs) && !occupied) ||
-      (diagonal?(move_x, move_y.abs) && attack?(x_new, y_new))
+      (diagonal?(move_x, move_y.abs) && attack?(x_new, y_new))) &&
+      !is_obstructed?(x_new, y_new)
   end
 
   def move(x_new, y_new)

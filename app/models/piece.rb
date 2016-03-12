@@ -159,9 +159,7 @@ class Piece < ActiveRecord::Base
     # Move is NSEW if the x_coordinate does not change, or the y_coordinate does not change
     delta_x = (x_coordinate - x_move).abs
     delta_y = (y_coordinate - y_move).abs
-    unless delta_x == 0 || delta_y == 0
-      raise 'This move is not allowed'
-    end
+    return false unless delta_x == 0 || delta_y == 0
     true
   end
 

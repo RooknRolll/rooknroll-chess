@@ -51,4 +51,11 @@ class Game < ActiveRecord::Base
     pieces.create(:type => 'Knight', :color => "White", :x_coordinate => 6, :y_coordinate => 0)
     pieces.create(:type => 'Rook', :color => "White", :x_coordinate => 7, :y_coordinate => 0)
   end
+
+  def check?(king)
+    opponents = pieces.where(color: king.opposite_color)
+    opponents.any? do |piece|
+      piece.valid_move?(king.x_coordinate, king.y_coordinate)
+    end
+  end
 end

@@ -69,6 +69,7 @@ RSpec.describe Game, type: :model do
       end
     end
 
+    # NOTE: Please uncomment the test below and remove this line when valid_move? for the Queen is complete
     # context 'Queen' do
     #   before(:each) do
     #     @queen = create(:queen, game_id: @game.id, x_coordinate: 2, y_coordinate: 2, color: 'Black')

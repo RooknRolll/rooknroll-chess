@@ -10,6 +10,11 @@
               x_coordinate: column), method: :put, class: 'square' do %>
             <% if piece = @game.pieces.find_by_coordinates(column, row) %>
               <span class="<%= piece.glyph %>" id='drag' ></span>
+              <script>
+              drag: function(event, ui) {
+                pieces.update
+              };
+              </script>
             <% end %>
           <% end %>
         </td>

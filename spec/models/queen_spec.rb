@@ -9,9 +9,9 @@ RSpec.describe Queen, type: :model do
 	  end
 
     # Failing
-    # it 'returns FALSE because proposed move is off the board' do
-    #  expect(@queen.valid_move?(0, 8)).to eq false
-    # end
+    it 'returns FALSE because proposed move is off the board' do
+      expect(@queen.valid_move?(0, 8)).to eq false
+    end
 
 	  it 'returns FALSE because proposed move is blocked by same color piece' do
 	    create(:pawn, x_coordinate: 4, y_coordinate: 6, game_id: @game.id)

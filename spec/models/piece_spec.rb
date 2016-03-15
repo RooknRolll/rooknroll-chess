@@ -74,7 +74,29 @@ RSpec.describe Piece, type: :model do
       @bishop.reload
       expect(@bishop.moved).to be true
     end
+
+    it 'accepts castling as a valid move' do
+      @game.pieces.destroy_all
+      @king = create(:king, game_id: @game.id, x_coordinate: 3, y_coordinate: 0)
+      @rook = create(:rook, game_id: @game.id, x_coordinate: 7, y_coordinate: 0)
+      @king.move(7, 0)
+      @king.reload
+      @rook.reload
+      expect(@king.x_coordinate).to eq 5
+      expect(@rook.x_coordinate).to eq 4
+    end
+
+    it 'destroys all en passants of the opposite color so that en passants are \
+        only valid for one turn' do
+      @game = create(:game)
+      @white_pawn = @game.pieces.find_by_coordinates(3, 1)
+      @black_knight = @game.pieces.find_by_coordinates(1, 7)
+      @white_pawn.move(3, 3)
+      @black_knight.move(2, 5)
+      expect(@game.en_passants).to be_empty
+    end
   end
+
 
   describe 'capturing another piece' do
     before(:each) do

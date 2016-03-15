@@ -1,12 +1,13 @@
 class Piece < ActiveRecord::Base
   belongs_to :player
   belongs_to :game
-  scope :bishops, -> { where(type: ‘Bishop’) }
-  scope :kings, -> { where(type: ‘King’) }
-  scope :knights, -> { where(type: ‘Knight’) }
-  scope :pawns, -> { where(type: ‘Pawn’) }
-  scope :queens, -> { where(type: ‘Queen’) }
-  scope :rooks, -> { where(type: ‘Rook’) }
+  has_many :en_passants, dependent: :destroy
+  scope :bishops, -> { where(type: 'Bishop') }
+  scope :kings, -> { where(type: 'King') }
+  scope :knights, -> { where(type: 'Knight') }
+  scope :pawns, -> { where(type: 'Pawn') }
+  scope :queens, -> { where(type: 'Queen') }
+  scope :rooks, -> { where(type: 'Rook') }
   # Adding scope allow calling methods like, Piece.kings, Piece.pawns, Piece.rooks
   # Piece.all, King.all, Pawn.all, Rook.all
   # Note sure if this is necessary but will leave it here for now.
@@ -31,23 +32,43 @@ class Piece < ActiveRecord::Base
   end
 
   def move(x_new, y_new)
+    return castle!(x_new, y_new) if castling_move?(x_new, y_new)
     if valid_move?(x_new, y_new)
-      captured_piece = game.pieces.find_by_coordinates(x_new, y_new)
-      # This next line checks that a captured piece exists and destroys it.
-      captured_piece && captured_piece.destroy
+      find_and_capture(x_new, y_new)
       update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
+      # destroy all enpassants on the other side to prevent them from being
+      # valid moves in subsequent turns
+      destroy_en_passants
       return true if save
     end
     false
   end
 
+  def find_and_capture(x, y)
+    captured_piece = game.pieces.find_by_coordinates(x, y)
+    # This next line checks that a captured piece exists and destroys it.
+    captured_piece && captured_piece.destroy
+  end
+
+  def opposite_color
+    if color == 'White'
+      'Black'
+    elsif color == 'Black'
+      'White'
+    else
+      raise 'not a valid color'
+    end
+  end
+
   def valid_move?(x_new, y_new)
-    # I pulled out the portions of the valid move method that all piece types
-    # should be calling, and placed them here. Check the bishop model to see
-    # how to call it.
-    return false unless actual_move?(x_new, y_new)
-    return false if move_attacking_own_piece?(x_new, y_new, color)
-    true
+    # # I pulled out the portions of the valid move method that all piece types
+    # # should be calling, and placed them here. Check the bishop model to see
+    # # how to call it.
+    # return false unless actual_move?(x_new, y_new)
+    # puts "actual_move passed"
+    # return false if move_attacking_own_piece?(x_new, y_new, color)
+    # puts "move_attacking_own_piece passed"
+    # true
   end
 
   def self.find_by_coordinates(column, row)
@@ -65,7 +86,6 @@ class Piece < ActiveRecord::Base
     # Set a range of the y values between the current position and the move
     # position
     range_y = set_range(y_coordinate, y_move) || []
-
     # Call spaces_between to get a list of the coordinates of the spaces between
     # current position and the move's position.
     check_for_pieces(spaces_between(range_x, range_y))
@@ -88,7 +108,19 @@ class Piece < ActiveRecord::Base
     x_move != x_coordinate && y_move != y_coordinate
   end
 
+  def destroy_en_passants
+    game.en_passants.color(opposite_color).destroy_all
+  end
+
   private
+
+  def castling_move?(x_move, y_move)
+    # First, moving piece must be a king.
+    return false unless type == 'King'
+    # Second, king must be able to castle with given coordinates
+    return false unless can_castle?(x_move, y_move)
+    true
+  end
 
   def check_for_pieces(coordinate_array)
     # Given an array of coordinates in the form of arrays containing two numbers
@@ -98,7 +130,7 @@ class Piece < ActiveRecord::Base
       y = space_coordinates[1]
       # For each space between the current location and the move location we
       # check if a piece exists in that space. If a piece is found return true.
-      if game.pieces.where('x_coordinate = ? and y_coordinate = ?', x, y).first
+      if game.pieces.find_by_coordinates(x, y)
         return true
       end
     end
@@ -127,37 +159,39 @@ class Piece < ActiveRecord::Base
     # Move is NSEW if the x_coordinate does not change, or the y_coordinate does not change
     delta_x = (x_coordinate - x_move).abs
     delta_y = (y_coordinate - y_move).abs
-    unless delta_x == 0 || delta_y == 0
-      raise 'This move is not allowed'
-    end
+    return false unless delta_x == 0 || delta_y == 0
     true
   end
 
   def set_range(origin, end_place)
     # This method returns a range of values between the values given it.
     # Example : set_range(7, 2) => (3..6)
+    # I had to change this to also give reverse ranges
     if origin < end_place
-      ((origin + 1)..(end_place - 1))
+      return (origin + 1 ... end_place).to_a
+    elsif origin > end_place
+      range = ((origin - 1) ... end_place + 1)
+      return range.first.downto(range.last).map{ |n| n }
     else
-      ((end_place + 1)..(origin - 1))
+      []
     end
   end
 
-  def spaces_between(range_x, range_y)
+  def spaces_between(array_x, array_y)
     intervening_spaces = []
     # Add to intervening_spaces a list of the coordinates of all the spaces
     # between the current location and the move location.
-    if range_x.any? && range_y.any?
+    if array_x.any? && array_y.any?
       # These next 3 lines run if the move is diagonal
-      range_x.each_with_index do |x, index|
-        intervening_spaces << [x, range_y.to_a[index]]
+      array_x.each_with_index do |num, index|
+        intervening_spaces << [num, array_y[index]]
       end
-    elsif range_x.any?
       # This runs if the move is horizontal
-      range_x.each { |x| intervening_spaces << [x, y_coordinate] }
-    elsif range_y.any?
+    elsif array_x.any?
+      array_x.each { |num| intervening_spaces << [num, y_coordinate] }
       # This runs if the move is vertical
-      range_y.each { |y| intervening_spaces << [x_coordinate, y] }
+    elsif array_y.any?
+      array_y.each { |num| intervening_spaces << [x_coordinate, num] }
     end
     intervening_spaces
   end

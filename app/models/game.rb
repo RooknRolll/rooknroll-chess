@@ -3,6 +3,7 @@ class Game < ActiveRecord::Base
   belongs_to :black_player, class_name: 'Player'
   belongs_to :white_player, class_name: 'Player'
   has_many :pieces
+  has_many :en_passants
 
   after_create :populate_board!
 
@@ -49,5 +50,12 @@ class Game < ActiveRecord::Base
     pieces.create(:type => 'Bishop', :color => "White", :x_coordinate => 5, :y_coordinate => 0)
     pieces.create(:type => 'Knight', :color => "White", :x_coordinate => 6, :y_coordinate => 0)
     pieces.create(:type => 'Rook', :color => "White", :x_coordinate => 7, :y_coordinate => 0)
+  end
+
+  def check?(king)
+    opponents = pieces.where(color: king.opposite_color)
+    opponents.any? do |piece|
+      piece.valid_move?(king.x_coordinate, king.y_coordinate)
+    end
   end
 end

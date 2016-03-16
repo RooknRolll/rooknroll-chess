@@ -129,26 +129,4 @@ RSpec.describe King, type: :model do
       expect(@queen_side_rook.x_coordinate).to eq 4
     end
   end
-
-  describe 'move_into_check?' do
-    before(:each) do
-      @game = create(:game)
-      @king = @game.pieces.find_by_coordinates(3, 0)
-      # This destroys the pawns in front of the Kings and Queens
-      @game.pieces.where(x_coordinate: [3, 4], y_coordinate: [1, 6]).destroy_all
-      # I was thinking I would just let the queen do the checking but then I
-      # the queen still hasn't had it's valid_move pushed.
-      # We can delete the next line and this comment when it is.
-      @rook = create(:rook, game_id: @game.id, x_coordinate: 4, y_coordinate: 6, color: 'Black')
-    end
-
-    it 'should return true if a move by the King would put it in check' do
-      expect(@king.move_into_check?(4, 0)).to eq true
-    end
-
-    it 'should return false if a move by the King would not put it in check' do
-      @pawn = create(:pawn, game_id: @game.id, x_coordinate: 4, y_coordinate: 5, color: 'Black')
-      expect(@king.move_into_check?(4, 0)).to eq false
-    end
-  end
 end

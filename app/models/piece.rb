@@ -47,21 +47,23 @@ class Piece < ActiveRecord::Base
   def move_into_check?(x_new, y_new)
     # Find any piece that is being attacked, and place it off board.
     attacked_piece = game.pieces.find_by_coordinates(x_new, y_new)
+    # Determine if move is EnPassant and remove attacked piece from board
+    attacked_piece ||= deterimine_en_passant(x_new, y_new)
     attacked_piece && attacked_piece.place_off_board
-    # Remember where the piece came from, so we can put it back if we have to.
+
+
+    # Remember where the piece came from, so we can put it back.
     old_attributes = { x_coordinate: x_coordinate, y_coordinate: y_coordinate, moved: moved }
     # Update attributes
     update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
-    # Determine if this has moved the player into check
-    if game.check?(color)
-      # If the player is in check, put everything back and return true.
-      update_attributes(old_attributes)
-      if attacked_piece
-        attacked_piece.update_attributes(x_coordinate: x_new, y_coordinate: y_new)
-      end
-      return true
+    # Determine if this has moved the player into check, save it to variable
+    check = game.check?(color)
+    # Put everything back
+    update_attributes(old_attributes)
+    if attacked_piece
+      attacked_piece.update_attributes(x_coordinate: x_new, y_coordinate: y_new)
     end
-    false
+    check
   end
 
   def place_off_board
@@ -69,6 +71,12 @@ class Piece < ActiveRecord::Base
     # From these coordinates the piece is incappable of having a valid move that
     # lands on the board.
     update_attributes(x_coordinate: 8, y_coordinate: 16)
+  end
+
+  def deterimine_en_passant(x, y)
+    ep = game.en_passants.find_by_coordinates(x, y)
+    return nil unless type == 'Pawn' && ep
+    ep.piece
   end
 
   def find_and_capture(x, y)

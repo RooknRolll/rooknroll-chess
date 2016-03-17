@@ -116,36 +116,45 @@ RSpec.describe Piece, type: :model do
   describe '#move_into_check?' do
     before(:each) do
       @game = create(:game)
-      @game.pawns.find_by_coordinates(3, 1).move(3, 3)
-      @game.pawns.find_by_coordinates(4, 6).move(4, 4)
-      @white_queen = @game.queens.find_by!(color: 'White')
-      @black_king = @game.kings.find_by!(color: 'Black')
-      @white_king = @game.kings.find_by!(color: 'White')
+      @game.pieces.destroy_all
+      @white_king = create(:king, x_coordinate: 3, y_coordinate: 0, game_id: @game.id)
+      @white_queen = create(:queen, x_coordinate: 4, y_coordinate: 0, game_id: @game.id)
+      @black_king = create(:king, x_coordinate: 3, y_coordinate: 7, color: 'Black', game_id: @game.id)
+      @black_queen = create(:queen, x_coordinate: 4, y_coordinate: 7, color: 'Black', game_id: @game.id)
     end
 
     it 'returns true when moving the king into check' do
-      @white_queen.move(1, 3)
-      expect(@black_king.move_into_check?(4, 6)).to be true
-      black_bishop = @game.bishops.find_by_coordinates(5, 7)
-      black_bishop.move(1, 3)
-      expect(@white_king.move_into_check?(3, 1)).to be true
-      expect(@white_king.move_into_check?(4, 0)).to be true
+      expect(@white_king.move_into_check?(4,1)).to be true
+      expect(@black_king.move_into_check?(4,6)).to be true
     end
 
     it 'returns false when a king is moving out of check' do
-
+      @black_queen.move(3, 6)
+      expect(@white_king.move_into_check?(2,0)).to be false
     end
 
     it 'returns true when moving a non-king piece would put your king in check' do
-
+      @white_queen.move(3, 1)
+      @black_queen.move(3, 6)
+      expect(@white_queen.move_into_check?(4,1)).to be true
     end
 
     it 'returns false when capturing a piece that had your king in check' do
-
+      @white_queen.move(3, 1)
+      @black_queen.move(3, 6)
+      expect(@white_queen.move_into_check?(3, 6)).to be false
     end
 
     it 'returns true when performing an en passant would put your king in check' do
+      white_pawn = create(:pawn, x_coordinate: 3, y_coordinate: 1, game_id: @game.id)
+      black_pawn = create(:pawn, x_coordinate: 4, y_coordinate: 3, moved: true, color: 'Black', game_id: @game.id)
+      @black_king.update_attributes(x_coordinate: 0, y_coordinate: 0)
+      @black_queen.update_attributes(x_coordinate: 0, y_coordinate: 3)
+      @white_queen.update_attributes(x_coordinate: 5, y_coordinate: 5)
+      @white_king.update_attributes(x_coordinate: 6, y_coordinate: 5)
 
+      white_pawn.move(3, 3)
+      expect(black_pawn.move_into_check?(3, 2)).to be true
     end
   end
 end

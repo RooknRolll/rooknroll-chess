@@ -33,7 +33,7 @@ class Piece < ActiveRecord::Base
 
   def move(x_new, y_new)
     return castle!(x_new, y_new) if castling_move?(x_new, y_new)
-    if valid_move?(x_new, y_new)
+    if valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
       find_and_capture(x_new, y_new)
       update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
       # destroy all enpassants on the other side to prevent them from being

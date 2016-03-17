@@ -100,6 +100,36 @@ RSpec.describe King, type: :model do
         expect(@king.can_castle?(7, 0)).to be false
       end
     end
+
+    context 'when one of the squares between the king and rook is attacked' do
+      before(:each) do
+        @black_queen = create(:queen, color: 'Black', x_coordinate: 4,
+                                      y_coordinate: 7, game_id: @game.id)
+      end
+      it 'should return false if the king moves through an attacked space on queen_side' do
+        expect(@king.can_castle?(7, 0)).to be false
+      end
+
+      it 'should return false if the king moves through an attacked space on king_side' do
+        @black_queen.update_attributes(x_coordinate: 2)
+        expect(@king.can_castle?(0, 0)).to be false
+      end
+
+      it 'should return false if the king lands attacked space on queen_side' do
+        @black_queen.update_attributes(x_coordinate: 5)
+        expect(@king.can_castle?(7, 0)).to be false
+      end
+
+      it 'should return false if the king lands attacked space on king_side' do
+        @black_queen.update_attributes(x_coordinate: 1)
+        expect(@king.can_castle?(0, 0)).to be false
+      end
+
+      it 'should return true if only the rook moves through an attacked space' do
+        @black_queen.update_attributes(x_coordinate: 6)
+        expect(@king.can_castle?(7, 0)).to be true
+      end
+    end
   end
 
   describe '#castle!' do

@@ -22,11 +22,15 @@ class King < Piece
     return false if rook.moved
     # return false if a piece is in the way
     return false if is_obstructed?(rook_x, rook_y)
-    # One of the rules for castling requires that the king not be in check, and
-    # all the squares that the king will move through during the castle are not
-    # in check. Will need to add code for that when check testing has been
-    # implemented.
+    # Check that none of the spaces that the king moves through are attacked
+    spaces_moved_through_by_castle(rook_x).each do |x_space|
+      return false if move_into_check?(x_space, y_coordinate)
+    end
     true
+  end
+
+  def spaces_moved_through_by_castle(rook_x)
+    rook_x == 7 ? [4, 5] : [1, 2]
   end
 
   def castle!(rook_x, rook_y)

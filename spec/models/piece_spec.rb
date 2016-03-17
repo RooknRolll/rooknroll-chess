@@ -55,6 +55,7 @@ RSpec.describe Piece, type: :model do
       @game = create(:game)
       @game.pieces.destroy_all
       @bishop = create(:bishop, game_id: @game.id)
+      create(:king, game_id: @game.id, y_coordinate: 0)
     end
     it 'moves the piece to the correct place when move is valid' do
       @bishop.move(5, 5)
@@ -64,6 +65,13 @@ RSpec.describe Piece, type: :model do
     end
     it 'does not move piece on an invalid move' do
       @bishop.move(4, 5)
+      @bishop.reload
+      expect(@bishop.x_coordinate).to eq 2
+      expect(@bishop.y_coordinate).to eq 2
+    end
+    it 'does not move if the move would put your king in check' do
+      create(:queen, y_coordinate: 7, color: 'Black', game_id: @game.id)
+      @bishop.move(5, 5)
       @bishop.reload
       expect(@bishop.x_coordinate).to eq 2
       expect(@bishop.y_coordinate).to eq 2
@@ -103,6 +111,7 @@ RSpec.describe Piece, type: :model do
       @game = create(:game)
       @game.pieces.destroy_all
       @bishop = create(:bishop, game_id: @game.id)
+      create(:king, game_id: @game.id, y_coordinate: 0)
       @pawn = create(:pawn, color: 'Black', game_id: @game.id, x_coordinate: 5, y_coordinate: 5)
     end
     it 'removes the captured piece' do

@@ -3,5 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).ready -> 
 	$(".piece").draggable({grid:[59,59], containment: "#chessboard"})
-	$(".square").droppable()
-	
+	$(".black-space").droppable({hoverClass: "border"}, drop: ->
+		console.log())
+	$(".white-space").droppable({hoverClass: "border"})

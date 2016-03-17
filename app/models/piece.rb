@@ -44,6 +44,33 @@ class Piece < ActiveRecord::Base
     false
   end
 
+  def move_into_check?(x_new, y_new)
+    # Find any piece that is being attacked, and place it off board.
+    attacked_piece = game.pieces.find_by_coordinates(x_new, y_new)
+    attacked_piece && attacked_piece.place_off_board
+    # Remember where the piece came from, so we can put it back if we have to.
+    old_attributes = { x_coordinate: x_coordinate, y_coordinate: y_coordinate, moved: moved }
+    # Update attributes
+    update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
+    # Determine if this has moved the player into check
+    if game.check?(color)
+      # If the player is in check, put everything back and return true.
+      update_attributes(old_attributes)
+      if attacked_piece
+        attacked_piece.update_attributes(x_coordinate: x_new, y_coordinate: y_new)
+      end
+      return true
+    end
+    false
+  end
+
+  def place_off_board
+    # At first I tried setting coordinates to nil, but that gave me problems
+    # From these coordinates the piece is incappable of having a valid move that
+    # lands on the board.
+    update_attributes(x_coordinate: 8, y_coordinate: 16)
+  end
+
   def find_and_capture(x, y)
     captured_piece = game.pieces.find_by_coordinates(x, y)
     # This next line checks that a captured piece exists and destroys it.

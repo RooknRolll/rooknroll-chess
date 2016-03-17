@@ -112,4 +112,40 @@ RSpec.describe Piece, type: :model do
       expect(Piece.find_by_id(pawn_id)).to be_nil
     end
   end
+
+  describe '#move_into_check?' do
+    before(:each) do
+      @game = create(:game)
+      @game.pawns.find_by_coordinates(3, 1).move(3, 3)
+      @game.pawns.find_by_coordinates(4, 6).move(4, 4)
+      @white_queen = @game.queens.find_by!(color: 'White')
+      @black_king = @game.kings.find_by!(color: 'Black')
+      @white_king = @game.kings.find_by!(color: 'White')
+    end
+
+    it 'returns true when moving the king into check' do
+      @white_queen.move(1, 3)
+      expect(@black_king.move_into_check?(4, 6)).to be true
+      black_bishop = @game.bishops.find_by_coordinates(5, 7)
+      black_bishop.move(1, 3)
+      expect(@white_king.move_into_check?(3, 1)).to be true
+      expect(@white_king.move_into_check?(4, 0)).to be true
+    end
+
+    it 'returns false when a king is moving out of check' do
+
+    end
+
+    it 'returns true when moving a non-king piece would put your king in check' do
+
+    end
+
+    it 'returns false when capturing a piece that had your king in check' do
+
+    end
+
+    it 'returns true when performing an en passant would put your king in check' do
+
+    end
+  end
 end

@@ -3,7 +3,7 @@ Rooknroll::Application.routes.draw do
 
   root 'static_pages#index'
 
-  resources :games, :only => [:new, :create, :show, :index, :update, :forfeit]
+  resources :games, :only => [:new, :create, :show, :index, :update]
   resources :pieces, :only => [:create, :show, :update]
 
   # The priority is based upon order of creation: first created -> highest priority.

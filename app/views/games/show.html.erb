@@ -18,16 +18,11 @@
 <button type="button" class="forfeit">Forfeit Game</button>
 <script>
 $(document).ready (function() {
-  $(".forfeit").click( function() {
-   confirm("Are you sure you want to forfeit?")
+  $(".forfeit").click(function() {
+   confirm("Are you sure you want to forfeit?");
    if (true) {
-      $(".piece").hide()
-      $("#chessboard").hide()
-      $(".forfeit").hide()
-      alert("Player has forfeited")
-      window.location.replace("/games/");
+      $(<% destroy %>)
     };
-  
-});
-});
+  });    
+});  
 </script>

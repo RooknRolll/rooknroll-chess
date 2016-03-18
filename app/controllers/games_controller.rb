@@ -26,6 +26,12 @@ class GamesController < ApplicationController
     redirect_to action: :show
   end
 
+  def forfeit
+    @forfeit = Game.delete 
+  end
+
+  helper_method :forfeit
+
   private
 
   def set_game

@@ -56,7 +56,7 @@ class Piece < ActiveRecord::Base
     # Update attributes
     update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
     # Determine if this has moved the player into check, save it to variable
-    check = game.check?(color
+    check = game.check?(color)
     # Put everything back
     update_attributes(old_attributes)
     if attacked_piece

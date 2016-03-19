@@ -15,8 +15,12 @@ class PiecesController < ApplicationController
     # pieces.  Remove this comment when you the other pieces are finished.
     x_move = params[:x_coordinate].to_i
     y_move = params[:y_coordinate].to_i
-    return redirect_to :back unless @piece.move(x_move, y_move)
-    redirect_to game_path(@piece.game)
+    @piece.move(x_move, y_move)
+    respond_to do |format|
+      format.html {redirect_to game_path(@piece.game)}
+      format.json { render json: @piece }
+    end
+    # return redirect_to :back unless @piece.move(x_move, y_move)
   end
 
   private

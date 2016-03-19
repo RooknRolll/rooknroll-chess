@@ -23,12 +23,19 @@ $(document).ready(function(){
       var column = $(this).data('column');
       var pieceId = ui.helper[0].dataset.pieceId;
       var moveData = {
-        'row': row,
-        'column': column,
-        'piece_id': pieceId
-      }
-      console.log(moveData);
+        'x_coordinate': column,
+        'y_coordinate': row
+      },
+      url = '/pieces/' + pieceId;
+      move(url, moveData);
     }
   });
-
+  var move = function(url, moveObject){
+    $.ajax({
+      method: 'PUT',
+      url: url,
+      data: moveObject,
+      dataType: 'json'
+    });
+  };
 });

@@ -39,6 +39,7 @@ class Piece < ActiveRecord::Base
       # destroy all enpassants on the other side to prevent them from being
       # valid moves in subsequent turns
       destroy_en_passants
+      game.increment!(:turn)
       return true if save
     end
     false

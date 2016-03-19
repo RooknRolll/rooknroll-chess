@@ -103,6 +103,12 @@ RSpec.describe Piece, type: :model do
       @black_knight.move(2, 5)
       expect(@game.en_passants).to be_empty
     end
+
+    it 'increments the turn column by 1 on a successful move' do
+      @bishop.move(5, 5)
+      @game.reload
+      expect(@game.turn).to eq 1
+    end
   end
 
 

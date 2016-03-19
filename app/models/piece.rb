@@ -50,7 +50,7 @@ class Piece < ActiveRecord::Base
     # Determine if move is EnPassant and remove attacked piece from board
     attacked_piece ||= deterimine_en_passant(x_new, y_new)
     attacked_piece && attacked_piece.place_off_board
-
+    puts attacked_piece.inspect
 
     # Remember where the piece came from, so we can put it back.
     old_attributes = { x_coordinate: x_coordinate, y_coordinate: y_coordinate, moved: moved }
@@ -58,6 +58,7 @@ class Piece < ActiveRecord::Base
     update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
     # Determine if this has moved the player into check, save it to variable
     check = game.check?(color)
+    puts check
     # Put everything back
     update_attributes(old_attributes)
     if attacked_piece

@@ -14,7 +14,7 @@ class Pawn < Piece
   end
 
   def move(x_new, y_new)
-    return false unless valid_move?(x_new, y_new)
+    return false unless valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
     move_y = move_y(y_new).abs
     move_x = move_x(x_new)
     create_en_passant if two_spaces_forward?(move_x, move_y)

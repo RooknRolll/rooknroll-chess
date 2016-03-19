@@ -19,6 +19,7 @@ $(document).ready(function(){
   $('.piece').draggable({grid:[59,59], containment: '#chessboard'});
   $('.space').droppable({
     drop: function(event, ui){
+      $(this.children).hide();
       var row = $(this).data('row');
       var column = $(this).data('column');
       var pieceId = ui.helper[0].dataset.pieceId;
@@ -31,11 +32,15 @@ $(document).ready(function(){
     }
   });
   var move = function(url, moveObject){
-    $.ajax({
+    var put = $.ajax({
       method: 'PUT',
       url: url,
       data: moveObject,
       dataType: 'json'
+    });
+
+    put.done(function(){
+      location.reload()
     });
   };
 });

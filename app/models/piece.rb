@@ -52,7 +52,6 @@ class Piece < ActiveRecord::Base
     attacked_piece ||= deterimine_en_passant(x_new, y_new)
     attacked_piece && attacked_piece.place_off_board
 
-
     # Remember where the piece came from, so we can put it back.
     old_attributes = { x_coordinate: x_coordinate, y_coordinate: y_coordinate, moved: moved }
     # Update attributes

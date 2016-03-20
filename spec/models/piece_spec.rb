@@ -55,7 +55,7 @@ RSpec.describe Piece, type: :model do
       @game = create(:game)
       @game.pieces.destroy_all
       @bishop = create(:bishop, game_id: @game.id)
-      create(:king, game_id: @game.id, y_coordinate: 0)
+      @king = create(:king, game_id: @game.id, y_coordinate: 0)
     end
     it 'moves the piece to the correct place when move is valid' do
       @bishop.move(5, 5)
@@ -75,6 +75,27 @@ RSpec.describe Piece, type: :model do
       @bishop.reload
       expect(@bishop.x_coordinate).to eq 2
       expect(@bishop.y_coordinate).to eq 2
+    end
+    it 'does not allow when you are in check and the proposed move would not get
+        you out of check' do
+      @king.update_attributes(x_coordinate: 3)
+      create(:knight, x_coordinate: 4, y_coordinate: 2, game_id: @game.id,
+                      color: 'Black')
+      @bishop.move(5, 5)
+      @bishop.reload
+      expect(@bishop.x_coordinate).to eq 2
+      expect(@bishop.y_coordinate).to eq 2
+    end
+
+    it 'does not allow when you are in check and the proposed move would not get
+        you out of check' do
+      @king.update_attributes(x_coordinate: 3)
+      create(:knight, x_coordinate: 4, y_coordinate: 2, game_id: @game.id,
+                      color: 'Black')
+      pawn = create(:pawn, x_coordinate: 0, y_coordinate: 1, game_id: @game.id)
+      pawn.move(0, 2)
+      pawn.reload
+      expect(pawn.y_coordinate).to eq 1
     end
 
     it 'changes the moved attribute to true' do
@@ -164,6 +185,12 @@ RSpec.describe Piece, type: :model do
 
       white_pawn.move(3, 3)
       expect(black_pawn.move_into_check?(3, 2)).to be true
+    end
+
+    it 'returns true when you are in check and the proposed move does not get
+        you out of check' do
+      create(:knight, x_coordinate: 2, y_coordinate: 5, game_id: @game.id)
+      expect(@black_queen.move_into_check?(4, 6)).to be true
     end
   end
 end

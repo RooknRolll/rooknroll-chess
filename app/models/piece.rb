@@ -147,6 +147,10 @@ class Piece < ActiveRecord::Base
     game.en_passants.color(opposite_color).destroy_all
   end
 
+  def piece_turn?
+    color == game.color_turn 
+  end
+
   private
 
   def castling_move?(x_move, y_move)

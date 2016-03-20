@@ -206,8 +206,18 @@ RSpec.describe Piece, type: :model do
   end
 
   describe 'piece_turn? method' do
-     @game = create(:game)
-     @pawn = @game.pieces.find_by_coordinates(0, 1)
-     expect(@pawn.piece_turn?).to eq true
+    before(:each) do     
+      @game = create(:game)
+    end
+
+    it 'should return true if color_turn? is White and piece color is White' do
+      @white_pawn = @game.pieces.find_by_coordinates(0, 1)
+      expect(@white_pawn.piece_turn?).to eq true
+    end
+
+    it 'should return false if the color_turn? is White and the piece color is Black' do
+      @black_pawn = @game.pieces.find_by_coordinates(0, 6)
+      expect(@black_pawn.piece_turn?).to eq false
+    end
   end
 end

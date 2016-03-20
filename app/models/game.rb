@@ -63,4 +63,8 @@ class Game < ActiveRecord::Base
   def color_turn
     turn.odd? ? 'Black' : 'White'
   end
+
+  def player_turn
+    color_turn == 'Black' ? black_player : white_player
+  end
 end

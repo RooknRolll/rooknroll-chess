@@ -104,4 +104,17 @@ RSpec.describe Game, type: :model do
       expect(@game.color_turn).to eq 'White'
     end
   end
+
+  describe 'player_turn' do
+    before(:each) do
+      @game = create(:game)
+    end
+
+    it 'should return white_player if color_turn is White' do
+      @game.color_turn
+      white_player = @game.white_player
+      black_player = @game.black_player
+      expect(@game.player_turn).to eq white_player
+    end
+  end
 end

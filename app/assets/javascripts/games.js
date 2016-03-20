@@ -41,6 +41,6 @@ $(document).ready(function(){
 
     put.done(function(){
       location.reload()
-    });
+    });  
   };
 });

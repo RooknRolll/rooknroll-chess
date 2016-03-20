@@ -32,7 +32,7 @@ class Piece < ActiveRecord::Base
 
   def move(x_new, y_new)
     return castle!(x_new, y_new) if castling_move?(x_new, y_new)
-    if valid_move?(x_new, y_new)
+    if valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
       find_and_capture(x_new, y_new)
       update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
       # destroy all enpassants on the other side to prevent them from being
@@ -41,6 +41,40 @@ class Piece < ActiveRecord::Base
       return true if save
     end
     false
+  end
+
+  def move_into_check?(x_new, y_new)
+    # Find any piece that is being attacked, and place it off board.
+    attacked_piece = game.pieces.find_by_coordinates(x_new, y_new)
+    # Determine if move is EnPassant and remove attacked piece from board
+    attacked_piece ||= deterimine_en_passant(x_new, y_new)
+    attacked_piece && attacked_piece.place_off_board
+
+    # Remember where the piece came from, so we can put it back.
+    old_attributes = { x_coordinate: x_coordinate, y_coordinate: y_coordinate, moved: moved }
+    # Update attributes
+    update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
+    # Determine if this has moved the player into check, save it to variable
+    check = game.check?(color)
+    # Put everything back
+    update_attributes(old_attributes)
+    if attacked_piece
+      attacked_piece.update_attributes(x_coordinate: x_new, y_coordinate: y_new)
+    end
+    check
+  end
+
+  def place_off_board
+    # At first I tried setting coordinates to nil, but that gave me problems
+    # From these coordinates the piece is incappable of having a valid move that
+    # lands on the board.
+    update_attributes(x_coordinate: 8, y_coordinate: 16)
+  end
+
+  def deterimine_en_passant(x, y)
+    ep = game.en_passants.find_by_coordinates(x, y)
+    return nil unless type == 'Pawn' && ep
+    ep.piece
   end
 
   def find_and_capture(x, y)

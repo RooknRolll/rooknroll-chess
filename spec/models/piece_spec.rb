@@ -204,4 +204,10 @@ RSpec.describe Piece, type: :model do
       expect(@black_queen.move_into_check?(4, 6)).to be true
     end
   end
+
+  describe 'piece_turn? method' do
+     @game = create(:game)
+     @pawn = @game.pieces.find_by_coordinates(0, 1)
+     expect(@pawn.piece_turn?).to eq true
+  end
 end

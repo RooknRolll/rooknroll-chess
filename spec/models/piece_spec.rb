@@ -104,10 +104,15 @@ RSpec.describe Piece, type: :model do
       expect(@game.en_passants).to be_empty
     end
 
-    it 'increments the turn column by 1 on a successful move' do
+    it 'increments turn by 1 on a successful move' do
       @bishop.move(5, 5)
-      @game.reload
-      expect(@game.turn).to eq 1
+      expect(@game.reload.turn).to eq 1
+    end
+
+    it 'does not increment turn on an unsuccessful move' do
+      @pawn = create(:pawn, x_coordinate: 3, y_coordinate: 1, game_id: @game.id)
+      @pawn.move(3, 1)
+      expect(@game.reload.turn).to eq 0
     end
   end
 

@@ -84,4 +84,24 @@ RSpec.describe Game, type: :model do
       end
     end
   end
+
+  describe 'color_turn method' do
+    before(:each) do
+      @game = create(:game)
+    end
+    
+    it 'should return White if the turn column is 0' do
+      expect(@game.color_turn).to eq 'White'
+    end
+
+    it 'should return Black if the turn column is an odd value' do
+      @game.update_attributes(turn: 1)
+      expect(@game.color_turn).to eq 'Black'
+    end
+
+    it 'should return White if the turn column is an even value' do
+      @game.update_attributes(turn: 4)
+      expect(@game.color_turn).to eq 'White'
+    end
+  end
 end

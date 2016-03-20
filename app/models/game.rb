@@ -59,4 +59,8 @@ class Game < ActiveRecord::Base
       piece.valid_move?(king.x_coordinate, king.y_coordinate)
     end
   end
+
+  def color_turn
+    turn.odd? ? 'Black' : 'White'
+  end
 end

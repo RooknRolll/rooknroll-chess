@@ -25,21 +25,15 @@ class GamesController < ApplicationController
     redirect_to action: :show
   end
 
-  helper_method :forfeit
-  def forfeit
+  def destroy
     @game = Game.find(params[:id])
     @game.destroy
     redirect_to games_path
   end
 
-  private
-
-  def destroy
-    @game = Game.find(params[:id])
-    @game.destroy
-  end
-
   helper_method :destroy
+
+  private
 
   def set_game
     @game = Game.find(params[:id])

@@ -53,7 +53,7 @@ RSpec.describe Pawn, type: :model do
       end
 
       it 'returns false for a move forward 2 spaces when not the first move' do
-        @pawn.move(0, 2, @white_player)
+        @pawn.move(0, 2)
         expect(@pawn.valid_move?(0, 4)).to eq(false)
       end
 
@@ -86,7 +86,7 @@ RSpec.describe Pawn, type: :model do
                       color: 'Black')
 
         @pawn.update_attributes(y_coordinate: 4, moved: true, color: 'White')
-        black_pawn.move(1, 4, @black_player)
+        black_pawn.move(1, 4)
         @game.update_attributes(turn: 2)
         expect(@pawn.valid_move?(1, 5)).to be true
       end
@@ -99,7 +99,7 @@ RSpec.describe Pawn, type: :model do
       @pawn = @game.pawns.find_by_coordinates(2, 1)
     end
     it 'creates an en passant in the square behind the pawn' do
-      @pawn.move(2, 3, @white_player)
+      @pawn.move(2, 3)
       expect(@pawn.en_passants.where(x_coordinate: 2, y_coordinate: 2).first)
         .not_to be nil
     end
@@ -112,18 +112,18 @@ RSpec.describe Pawn, type: :model do
       @white_pawn = @game.pieces.find_by_coordinates(4, 1)
       @white_player = @game.white_player
       @black_player = @game.black_player
-      @white_pawn.move(4, 3, @white_player)
-      @black_pawn.move(3, 4, @black_player)
+      @white_pawn.move(4, 3)
+      @black_pawn.move(3, 4)
     end
     it 'moves the piece to the place where the capture occurs' do
-      @black_pawn.move(4, 3, @black_player)
+      @black_pawn.move(4, 3)
       @black_pawn.reload
       expect(@game.pieces.find_by_coordinates(4, 3).id).to eq @black_pawn.id
     end
 
     it 'destroys the captured piece' do
       white_pawn_id = @white_pawn.id
-      @black_pawn.move(4, 3, @black_player)
+      @black_pawn.move(4, 3)
       expect(Piece.find_by_id(white_pawn_id)).to be nil
     end
   end

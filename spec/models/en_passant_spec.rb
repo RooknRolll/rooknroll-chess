@@ -11,8 +11,8 @@ RSpec.describe EnPassant, type: :model do
     end
     it 'destroys the associated pawn' do
       @white_pawn.update_attributes(y_coordinate: 4, moved: true)
-      @black_pawn.move(2, 4, @black_player)
-      @white_pawn.move(2, 5, @white_player)
+      @black_pawn.move(2, 4)
+      @white_pawn.move(2, 5)
       expect(Piece.find_by_id(@black_pawn.id)).to be nil
     end
   end

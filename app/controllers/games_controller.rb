@@ -1,7 +1,6 @@
 class GamesController < ApplicationController
   before_action :authenticate_player!
   before_action :set_game, only: [:show, :update]
-
   def index
     @opengames = Game.with_open_seats
   end
@@ -25,6 +24,14 @@ class GamesController < ApplicationController
     @game.update(black_player: current_player)
     redirect_to action: :show
   end
+
+  def destroy
+    @game = Game.find(params[:id])
+    @game.destroy
+    redirect_to games_path
+  end
+
+  helper_method :destroy
 
   private
 

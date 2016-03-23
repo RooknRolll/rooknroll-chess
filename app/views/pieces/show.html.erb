@@ -1,3 +1,5 @@
+<%= javascript_include_tag "pieces" %>
+<button type="button">Forfeit</button>
 <table id="chessboard">
   <% (0..7).each do |row| %>
     <tr>
@@ -8,7 +10,7 @@
             <%= link_to piece_path(@chosen_piece, y_coordinate: row,
               x_coordinate: column), method: :put, class: 'square' do %>
             <% if piece = @game.pieces.find_by_coordinates(column, row) %>
-              <span class="<%= piece.glyph %>" ></span>
+              <span class="<%= piece.glyph %>" id='drag' ></span>
             <% end %>
           <% end %>
         </td>
@@ -16,3 +18,8 @@
     </tr>
   <% end %>
 </table>
+<br />
+<br />
+<br />
+
+

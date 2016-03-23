@@ -41,6 +41,8 @@ gem 'omniauth-facebook'
 
 gem 'rubocop', '~> 0.37.2', require: false
 
+gem 'jquery-ui-rails'
+
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

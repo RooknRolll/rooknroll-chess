@@ -31,7 +31,8 @@ class Piece < ActiveRecord::Base
     return "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
   end
 
-  def move(x_new, y_new)
+  def move(x_new, y_new, player)
+    return false unless correct_turn?(player)
     return castle!(x_new, y_new) if castling_move?(x_new, y_new)
     if valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
       find_and_capture(x_new, y_new)
@@ -149,6 +150,14 @@ class Piece < ActiveRecord::Base
 
   def piece_turn?
     color == game.color_turn 
+  end
+
+  def correct_player?(player)
+    player == game.player_turn
+  end
+
+  def correct_turn?(player)
+    piece_turn? && correct_player?(player)
   end
 
   private

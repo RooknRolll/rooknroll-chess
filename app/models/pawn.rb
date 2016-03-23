@@ -13,7 +13,8 @@ class Pawn < Piece
       !is_obstructed?(x_new, y_new)
   end
 
-  def move(x_new, y_new)
+  def move(x_new, y_new, player)
+    return false unless correct_turn?(player)
     return false unless valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
     move_y = move_y(y_new).abs
     move_x = move_x(x_new)

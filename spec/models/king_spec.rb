@@ -4,6 +4,7 @@ RSpec.describe King, type: :model do
   	before(:each) do
       @game = create(:game)
       @game.pieces.destroy_all
+      @black_player = @game.black_player
       @king = create(:king, game_id: @game.id)
     end
 
@@ -29,7 +30,7 @@ RSpec.describe King, type: :model do
     end
 
     it 'should return false for a move into check' do
-      @king.move(4, 0)
+      @king.move(4, 0, @black_player)
       @rook = create(:rook, game_id: @game.id, x_coordinate: 5, y_coordinate: 2, color: 'Black')
       expect(@king.valid_move?(5, 0)).to eq false
     end
@@ -44,6 +45,7 @@ RSpec.describe King, type: :model do
                                       y_coordinate: 0)
       @queen_side_rook = create(:rook, game_id: @game.id, x_coordinate: 7,
                                        y_coordinate: 0)
+      @white_player = @game.white_player
     end
 
     it 'returns true when castling is valid' do
@@ -68,20 +70,20 @@ RSpec.describe King, type: :model do
 
     context 'when one of the involved pieces has moved' do
       it 'returns false for a king side castle if the king side rook has moved' do
-        @king_side_rook.move(0, 5)
-        @king_side_rook.move(0, 0)
+        @king_side_rook.move(0, 5, @white_player)
+        @king_side_rook.move(0, 0, @white_player)
         expect(@king.can_castle?(0, 0)).to be false
       end
 
       it 'returns false if when queen side rook has move' do
-        @queen_side_rook.move(7, 2)
-        @queen_side_rook.move(7, 0)
+        @queen_side_rook.move(7, 2, @white_player)
+        @queen_side_rook.move(7, 0, @white_player)
         expect(@king.can_castle?(7, 0)).to be false
       end
 
       it 'returns false if the king has moved' do
-        @king.move(3, 1)
-        @king.move(3, 0)
+        @king.move(3, 1, @white_player)
+        @king.move(3, 0, @white_player)
         expect(@king.can_castle?(7, 0)).to be false
         expect(@king.can_castle?(0, 0)).to be false
       end
@@ -89,12 +91,12 @@ RSpec.describe King, type: :model do
 
     context 'there is no rook at the given space' do
       it 'returns false if the space is empty' do
-        @queen_side_rook.move(7, 2)
+        @queen_side_rook.move(7, 2, @white_player)
         expect(@king.can_castle?(7, 0)).to be false
       end
 
       it 'returns false if a non rook piece is at the given location' do
-        @queen_side_rook.move(7, 2)
+        @queen_side_rook.move(7, 2, @white_player)
         create(:knight , game_id: @game.id, x_coordinate: 7, y_coordinate: 0,
                          moved: true)
         expect(@king.can_castle?(7, 0)).to be false

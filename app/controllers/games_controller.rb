@@ -29,9 +29,10 @@ class GamesController < ApplicationController
   def destroy 
     @game = Game.find(params[:id])
     @game.destroy
+    redirect_to games_path
   end
 
-  helper_method: destroy
+  helper_method :destroy
 
   private
 

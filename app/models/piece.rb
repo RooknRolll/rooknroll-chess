@@ -160,6 +160,18 @@ class Piece < ActiveRecord::Base
     piece_turn? && correct_player?
   end
 
+  def has_valid_moves?
+    game.all_board_spaces.each do |arr|
+      x = arr[0]
+      y = arr[1]
+      if valid_move?(x, y) &&
+         !move_into_check?(x, y)
+        return true
+      end
+    end
+    false
+  end
+
   private
 
   def castling_move?(x_move, y_move)

@@ -241,16 +241,11 @@ RSpec.describe Piece, type: :model do
       @game.color_turn
       @white_player = @game.white_player
       @black_player = @game.black_player
-      @game.player_turn
       @white_pawn = @game.pieces.find_by_coordinates(0, 1)
     end
 
     it 'should return true if the player equals player_turn' do
-      expect(@white_pawn.correct_player?(@white_player)).to eq true
-    end
-
-    it 'should return false if the player does not equal player_turn' do
-      expect(@white_pawn.correct_player?(@black_player)).to eq false
+      expect(@white_pawn.correct_player?).to eq true
     end
   end
 
@@ -266,15 +261,11 @@ RSpec.describe Piece, type: :model do
     end
 
     it 'should return true if piece_turn? and correct_player? are true' do
-      expect(@white_pawn.correct_turn?(@white_player)).to eq true
+      expect(@white_pawn.correct_turn?).to eq true
     end
 
     it 'should return false if piece_turn? is false' do
-      expect(@black_pawn.correct_turn?(@white_player)).to eq false
-    end
-
-    it 'should return false if correct_player? is false' do
-      expect(@white_pawn.correct_turn?(@black_player)).to eq false
+      expect(@black_pawn.correct_turn?).to eq false
     end
   end
 end

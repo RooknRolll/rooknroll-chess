@@ -32,8 +32,6 @@ class GamesController < ApplicationController
     redirect_to games_path
   end
 
-  helper_method :destroy
-
   private
 
   def set_game

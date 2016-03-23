@@ -32,7 +32,7 @@ class Piece < ActiveRecord::Base
   end
 
   def move(x_new, y_new)
-    # return false unless correct_turn?(player)
+    return false unless correct_turn?
     return castle!(x_new, y_new) if castling_move?(x_new, y_new)
     if valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
       find_and_capture(x_new, y_new)

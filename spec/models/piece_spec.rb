@@ -54,14 +54,21 @@ RSpec.describe Piece, type: :model do
     before(:each) do
       @game = create(:game)
       @game.pieces.destroy_all
-      @bishop = create(:bishop, game_id: @game.id)
-      @king = create(:king, game_id: @game.id, y_coordinate: 0)
-      @game.color_turn
       @white_player = @game.white_player
       @black_player = @game.black_player
+      @bishop = create(:bishop, game_id: @game.id, player_id: @white_player.id)
+      @king = create(:king, game_id: @game.id, player_id: @white_player.id,
+                            y_coordinate: 0)
+      @game.color_turn
       @game.player_turn
-      @white_bishop = create(:bishop, game_id: @game.id, color: 'White', x_coordinate: 2, y_coordinate: 0)
-      @black_bishop = create(:bishop, game_id: @game.id, color: 'Black', x_coordinate: 2, y_coordinate: 7)
+      @white_bishop = create(:bishop, game_id: @game.id,
+                                      player_id: @white_player.id,
+                                      color: 'White', x_coordinate: 2,
+                                      y_coordinate: 0)
+      @black_bishop = create(:bishop, game_id: @game.id,
+                                      player_id: @black_player.id,
+                                      color: 'Black', x_coordinate: 2,
+                                      y_coordinate: 7)
     end
     it 'moves the piece to the correct place when move is valid' do
       @bishop.move(5, 5)
@@ -109,8 +116,10 @@ RSpec.describe Piece, type: :model do
 
     it 'accepts castling as a valid move' do
       @game.pieces.destroy_all
-      @king = create(:king, game_id: @game.id, x_coordinate: 3, y_coordinate: 0)
-      @rook = create(:rook, game_id: @game.id, x_coordinate: 7, y_coordinate: 0)
+      @king = create(:king, game_id: @game.id, player_id: @white_player.id,
+                            x_coordinate: 3, y_coordinate: 0)
+      @rook = create(:rook, game_id: @game.id, player_id: @white_player.id,
+                            x_coordinate: 7, y_coordinate: 0)
       @king.move(7, 0)
       @king.reload
       @rook.reload
@@ -121,6 +130,7 @@ RSpec.describe Piece, type: :model do
     it 'destroys all en passants of the opposite color so that en passants are \
         only valid for one turn' do
       @game = create(:game)
+      @game.pieces.where(color: 'Black').update_all(player_id: @game.black_player.id)
       @white_pawn = @game.pieces.find_by_coordinates(3, 1)
       @black_knight = @game.pieces.find_by_coordinates(1, 7)
       @white_pawn.move(3, 3)
@@ -156,9 +166,10 @@ RSpec.describe Piece, type: :model do
     before(:each) do
       @game = create(:game)
       @game.pieces.destroy_all
-      @white_bishop = create(:bishop, game_id: @game.id, color: 'White', x_coordinate: 4, y_coordinate: 4)
-      create(:king, game_id: @game.id, y_coordinate: 0)
-      @pawn = create(:pawn, color: 'Black', game_id: @game.id, x_coordinate: 5, y_coordinate: 5)
+      @white_player = @game.white_player
+      @white_bishop = create(:bishop, player_id: @white_player.id, game_id: @game.id, color: 'White', x_coordinate: 4, y_coordinate: 4)
+      create(:king, player_id: @white_player.id, game_id: @game.id, y_coordinate: 0)
+      @pawn = create(:pawn, color: 'Black', player_id: @game.black_player.id, game_id: @game.id, x_coordinate: 5, y_coordinate: 5)
     end
 
     it 'removes the captured piece' do

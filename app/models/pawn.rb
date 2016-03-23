@@ -23,6 +23,7 @@ class Pawn < Piece
     find_and_capture(x_new, y_new)
     update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
     destroy_en_passants
+    game.increment!(:turn)
   end
 
   def forward_move?(y_new)

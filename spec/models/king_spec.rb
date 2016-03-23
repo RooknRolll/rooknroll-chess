@@ -40,12 +40,15 @@ RSpec.describe King, type: :model do
     before(:each) do
       @game = create(:game)
       @game.pieces.destroy_all
-      @king = create(:king, game_id: @game.id, x_coordinate: 3, y_coordinate: 0)
-      @king_side_rook = create(:rook, game_id: @game.id, x_coordinate: 0,
-                                      y_coordinate: 0)
-      @queen_side_rook = create(:rook, game_id: @game.id, x_coordinate: 7,
-                                       y_coordinate: 0)
       @white_player = @game.white_player
+      @king = create(:king, player_id: @white_player.id, game_id: @game.id,
+                            x_coordinate: 3, y_coordinate: 0)
+      @king_side_rook = create(:rook, player_id: @white_player.id,
+                                      game_id: @game.id, x_coordinate: 0,
+                                      y_coordinate: 0)
+      @queen_side_rook = create(:rook, player_id: @white_player.id,
+                                       game_id: @game.id, x_coordinate: 7,
+                                       y_coordinate: 0)
     end
 
     it 'returns true when castling is valid' do

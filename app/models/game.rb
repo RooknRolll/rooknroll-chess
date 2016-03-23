@@ -67,15 +67,16 @@ class Game < ActiveRecord::Base
   def player_has_valid_moves?(color)
     players_pieces = pieces.where(color: color)
     players_pieces.each do |piece|
-      8.times do |x_space|
-        8.times do |y_space|
-          if piece.valid_move?(x_space, y_space) &&
-             !piece.move_into_check?(x_space, y_space)
-            return true
-          end
-        end
-      end
+      return true if piece.has_valid_moves?
     end
     false
+  end
+
+  def all_board_spaces
+    two_d_array = []
+    8.times do |x|
+      8.times { |y| two_d_array << [x, y] }
+    end
+    two_d_array
   end
 end

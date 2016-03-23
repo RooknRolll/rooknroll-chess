@@ -14,3 +14,5 @@
     </tr>
   <% end %>
 </table>
+
+<%= link_to 'Resign', game_path(@game), method: :delete, confirm: 'Are you sure you want to forfeit?', class: 'btn btn-danger' %>

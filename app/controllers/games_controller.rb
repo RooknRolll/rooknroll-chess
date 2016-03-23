@@ -26,6 +26,13 @@ class GamesController < ApplicationController
     redirect_to action: :show
   end
 
+  def destroy 
+    @game = Game.find(params[:id])
+    @game.destroy
+  end
+
+  helper_method: destroy
+
   private
 
   def set_game

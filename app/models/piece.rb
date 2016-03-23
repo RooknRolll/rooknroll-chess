@@ -152,12 +152,12 @@ class Piece < ActiveRecord::Base
     color == game.color_turn
   end
 
-  def correct_player?(player)
+  def correct_player?
     player == game.player_turn
   end
 
-  def correct_turn?(player)
-    piece_turn? && correct_player?(player)
+  def correct_turn?
+    piece_turn? && correct_player?
   end
 
   private

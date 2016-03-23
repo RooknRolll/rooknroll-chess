@@ -84,4 +84,50 @@ RSpec.describe Game, type: :model do
       end
     end
   end
+
+  describe 'player_has_valid_moves' do
+    before(:each) do
+      @game = create(:game)
+      @game.pieces.destroy_all
+      @white_king = create(:king, game_id: @game.id, x_coordinate: 0, y_coordinate: 0)
+      @black_king = create(:king, game_id: @game.id, x_coordinate: 7, y_coordinate: 7, color:'Black')
+    end
+
+    it 'returns false when a player has no valid moves' do
+      create(:rook, game_id: @game.id, x_coordinate: 1, y_coordinate: 6, color: 'Black')
+      create(:rook, game_id: @game.id, x_coordinate: 6, y_coordinate: 1, color: 'Black')
+      expect(@game.player_has_valid_moves?('White')).to be false
+    end
+
+    it 'returns true when a player has valid moves' do
+      create(:rook, game_id: @game.id, x_coordinate: 1, y_coordinate: 6, color: 'Black')
+      expect(@game.player_has_valid_moves?('White')).to be true
+    end
+  end
+
+  describe 'player_in_checkmate' do
+    before(:each) do
+      @game = create(:game)
+      @white_queen = @game.pieces.find_by(type: 'Queen', color: 'White')
+      @white_bishop = @game.pieces.find_by_coordinates(2, 0)
+      @white_queen.update_attributes(x_coordinate: 0, y_coordinate: 4)
+    end
+
+    it 'returns false when the player is not in check' do
+      expect(@game.player_in_checkmate?('Black')).to be false
+    end
+
+    it 'returns false when the player is in check but can get out of check' do
+      black_knight = @game.pieces.find_by_coordinates(1, 7)
+      black_knight.move(0, 5)
+      @white_queen.move(2, 6)
+      expect(@game.player_in_checkmate?('Black')).to be false
+    end
+
+    it 'returns true when the player is in checkmate' do
+      @white_bishop.update_attributes(x_coordinate: 5, y_coordinate: 3)
+      @white_queen.move(2, 6)
+      expect(@game.player_in_checkmate?('Black')).to be true
+    end
+  end
 end

@@ -59,4 +59,23 @@ class Game < ActiveRecord::Base
       piece.valid_move?(king.x_coordinate, king.y_coordinate)
     end
   end
+
+  def player_in_checkmate?(color)
+    check?(color) && !player_has_valid_moves?(color)
+  end
+
+  def player_has_valid_moves?(color)
+    players_pieces = pieces.where(color: color)
+    players_pieces.each do |piece|
+      8.times do |x_space|
+        8.times do |y_space|
+          if piece.valid_move?(x_space, y_space) &&
+             !piece.move_into_check?(x_space, y_space)
+            return true
+          end
+        end
+      end
+    end
+    false
+  end
 end

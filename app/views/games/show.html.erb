@@ -15,4 +15,11 @@
   <% end %>
 </table>
 
+<% %w(Black White).each do |color| %>
+  <% if @game.check?(color) %>
+    <% check_or_checkmate = @game.player_in_checkmate?(color) ? 'checkmate' : 'check' %>
+    <%= content_tag :h3, "#{color} Player is in #{check_or_checkmate}" %>
+  <% end %>
+<% end %>
+
 <%= link_to 'Resign', game_path(@game), method: :delete, confirm: 'Are you sure you want to forfeit?', class: 'btn btn-danger' %>

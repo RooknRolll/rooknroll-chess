@@ -68,12 +68,18 @@ class Game < ActiveRecord::Base
       losing_player = color == 'White' ? white_player : black_player
       # Don't increment win losses if a player is playing against themself
       unless winning_player == losing_player
-        winning_player.increment!(:wins)
-        losing_player.increment!(:losses)
+        increment_win_losses(winning_player, losing_player)
       end
       return true
     end
     false
+  end
+
+  def increment_win_losses(winner, loser)
+    return if game_over
+    winner.increment!(:wins)
+    loser.increment!(:losses)
+    update(game_over: true)
   end
 
   def player_has_valid_moves?(color)

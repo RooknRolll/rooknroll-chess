@@ -1,7 +1,7 @@
 <table id="chessboard">
-  <% (0..7).each do |row| %>
+  <% square_order_by_color(@game).each do |row| %>
     <tr>
-      <% (0..7).each do |column| %>
+      <% square_order_by_color(@game).each do |column| %>
         <% square_color = (row + column).odd? ? 'black' : 'white' %>
         <td class="<%= square_color %>-space">
           <% if piece = @game.pieces.find_by_coordinates(column, row) %>

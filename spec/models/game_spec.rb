@@ -129,5 +129,19 @@ RSpec.describe Game, type: :model do
       @white_queen.move(2, 6)
       expect(@game.player_in_checkmate?('Black')).to be true
     end
+
+    it 'increments the winning players win column' do
+      @white_bishop.update_attributes(x_coordinate: 5, y_coordinate: 3)
+      @white_queen.move(2, 6)
+      @game.player_in_checkmate?('Black')
+      expect(@game.white_player.wins).to eq 1
+    end
+
+    it 'increments the losing players losses column' do
+      @white_bishop.update_attributes(x_coordinate: 5, y_coordinate: 3)
+      @white_queen.move(2, 6)
+      @game.reload
+      expect(@game.black_player.losses).to eq 1
+    end
   end
 end

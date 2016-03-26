@@ -61,7 +61,19 @@ class Game < ActiveRecord::Base
   end
 
   def player_in_checkmate?(color)
-    check?(color) && !player_has_valid_moves?(color)
+    # Determine if the game is in a checkmate state, and increment the player's
+    # win/loss accordingly.
+    if check?(color) && !player_has_valid_moves?(color)
+      winning_player = color == 'White' ? black_player : white_player
+      losing_player = color == 'White' ? white_player : black_player
+      # Don't increment win losses if a player is playing against themself
+      unless winning_player == losing_player
+        winning_player.increment!(:wins)
+        losing_player.increment!(:losses)
+      end
+      return true
+    end
+    false
   end
 
   def player_has_valid_moves?(color)

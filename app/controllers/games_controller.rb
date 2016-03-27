@@ -29,6 +29,12 @@ class GamesController < ApplicationController
 
   def destroy
     @game = Game.find(params[:id])
+    winning_player = if @game.white_player == current_player
+                       black_player
+                     else
+                       white_player
+                     end
+    @game.increment_win_losses(winning_player, current_player)
     @game.destroy
     redirect_to games_path
   end

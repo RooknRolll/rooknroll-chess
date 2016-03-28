@@ -3,9 +3,9 @@
     <tr>
       <% square_order_by_color(@game).each do |column| %>
         <% square_color = (row + column).odd? ? 'black' : 'white' %>
-        <%= content_tag :td, class:"#{square_color}-space space", data: {row: row, column: column} do %>
+        <%= content_tag :td, class:"#{square_color}-space space", data: {row: row, column: column}, id: "square-#{column}-#{row}" do %>
           <% if piece = @game.pieces.find_by_coordinates(column, row) %>
-            <%= tag(:span, class: "#{piece.glyph}", data: {piece_id: piece.id}) %>
+            <%= tag(:span, class: "#{piece.glyph}", data: {piece_id: piece.id}, id: "piece-#{piece.id}") %>
           <% end %>
         <% end %>
       <% end %>

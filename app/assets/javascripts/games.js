@@ -3,14 +3,23 @@
 // # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready(function(){
+  var posStack = [];
+  var coordinates = function(element) {
+      element = $(element);
+      var top = element.position().top;
+      var left = element.position().left;
+      $('#results').text('X: ' + left + ' ' + '   Y: ' + top);
+      posStack.push({x:left,y:top});
+  }
   $('.piece').draggable({grid:[59,59], containment: '#chessboard'});
   $('.space').droppable({
     drop: function(event, ui){
       // This line hides any pieces you capture. Before I added it, capture
       // attempts looked bad as one piece just sat on top of the other while
       // the database validated the move.
-      $(this.children).hide();
+      // $(this.children).hide();
       // 'this' refers to the space that you are moving to
+      console.log(ui);
       var row = $(this).data('row');
       var column = $(this).data('column');
       // Find the id of the dropped piece.
@@ -34,8 +43,14 @@ $(document).ready(function(){
     });
     // Once the ajax post is complete, refresh the page.
     // I would like to change this part to something better.
-    put.done(function(){
-      location.reload()
+    put.done(function(data){
+      // console.log(data);
+      $.each(data.pieces, function(i, val){
+        console.log(val);
+        $('#square-'+val.x_coordinate+'-'+val.y_coordinate).append($('#piece-'+val.id))
+        $('.piece').css({'left': 0, 'top': 0});
+      });
+
     });
-  };
+  }
 });

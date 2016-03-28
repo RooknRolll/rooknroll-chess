@@ -39,17 +39,17 @@ class Game < ActiveRecord::Base
 
     # Pawns Row from left to right
     (0..7).each do |p|
-    	pieces.create(:type => 'Pawn', :color => "White", :x_coordinate => p, :y_coordinate => 1)
+    	pieces.create(player_id: white_player.id, :type => 'Pawn', :color => "White", :x_coordinate => p, :y_coordinate => 1)
     end
     # Back Row from left to right
-    pieces.create(:type => 'Rook', :color => "White", :x_coordinate => 0, :y_coordinate => 0)
-    pieces.create(:type => 'Knight', :color => "White", :x_coordinate => 1, :y_coordinate => 0)
-    pieces.create(:type => 'Bishop', :color => "White", :x_coordinate => 2, :y_coordinate => 0)
-    pieces.create(:type => 'King', :color => "White", :x_coordinate => 3, :y_coordinate => 0)
-    pieces.create(:type => 'Queen', :color => "White", :x_coordinate => 4, :y_coordinate => 0)
-    pieces.create(:type => 'Bishop', :color => "White", :x_coordinate => 5, :y_coordinate => 0)
-    pieces.create(:type => 'Knight', :color => "White", :x_coordinate => 6, :y_coordinate => 0)
-    pieces.create(:type => 'Rook', :color => "White", :x_coordinate => 7, :y_coordinate => 0)
+    pieces.create(player_id: white_player.id, :type => 'Rook', :color => "White", :x_coordinate => 0, :y_coordinate => 0)
+    pieces.create(player_id: white_player.id, :type => 'Knight', :color => "White", :x_coordinate => 1, :y_coordinate => 0)
+    pieces.create(player_id: white_player.id, :type => 'Bishop', :color => "White", :x_coordinate => 2, :y_coordinate => 0)
+    pieces.create(player_id: white_player.id, :type => 'King', :color => "White", :x_coordinate => 3, :y_coordinate => 0)
+    pieces.create(player_id: white_player.id, :type => 'Queen', :color => "White", :x_coordinate => 4, :y_coordinate => 0)
+    pieces.create(player_id: white_player.id, :type => 'Bishop', :color => "White", :x_coordinate => 5, :y_coordinate => 0)
+    pieces.create(player_id: white_player.id, :type => 'Knight', :color => "White", :x_coordinate => 6, :y_coordinate => 0)
+    pieces.create(player_id: white_player.id, :type => 'Rook', :color => "White", :x_coordinate => 7, :y_coordinate => 0)
   end
 
   def check?(color)
@@ -58,6 +58,14 @@ class Game < ActiveRecord::Base
     opponents.any? do |piece|
       piece.valid_move?(king.x_coordinate, king.y_coordinate)
     end
+  end
+
+  def color_turn
+    turn.odd? ? 'Black' : 'White'
+  end
+
+  def player_turn
+    color_turn == 'Black' ? black_player : white_player
   end
 
   def player_in_checkmate?(color)

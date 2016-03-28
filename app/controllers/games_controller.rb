@@ -23,6 +23,7 @@ class GamesController < ApplicationController
 
   def update
     @game.update(black_player: current_player)
+    @game.pieces.where(color: 'Black').update_all(player_id: current_player.id)
     redirect_to action: :show
   end
 

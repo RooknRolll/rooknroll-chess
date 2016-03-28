@@ -32,6 +32,7 @@ class Piece < ActiveRecord::Base
   end
 
   def move(x_new, y_new)
+    return false unless correct_turn?
     return castle!(x_new, y_new) if castling_move?(x_new, y_new)
     if valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
       find_and_capture(x_new, y_new)
@@ -39,6 +40,7 @@ class Piece < ActiveRecord::Base
       # destroy all enpassants on the other side to prevent them from being
       # valid moves in subsequent turns
       destroy_en_passants
+      game.increment!(:turn)
       return true if save
     end
     false
@@ -144,6 +146,18 @@ class Piece < ActiveRecord::Base
 
   def destroy_en_passants
     game.en_passants.color(opposite_color).destroy_all
+  end
+
+  def piece_turn?
+    color == game.color_turn
+  end
+
+  def correct_player?
+    player == game.player_turn
+  end
+
+  def correct_turn?
+    piece_turn? && correct_player?
   end
 
   def has_valid_moves?

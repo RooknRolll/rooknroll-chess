@@ -47,11 +47,13 @@ RSpec.describe Bishop, type: :model do
   describe "bishop move" do
     before(:each) do
       @game = create(:game)
+      @black_player = @game.black_player
       @bishop = @game.pieces.find_by_coordinates(2, 7)
       @pawn = @game.pieces.find_by_coordinates(3, 6)
     end
 
     it 'is able to move on a fully populated board' do
+      @game.update_attributes(turn: 1)
       @pawn.move(3, 5)
       expect(@bishop.valid_move?(7, 2)).to be true
     end

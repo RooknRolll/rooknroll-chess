@@ -14,6 +14,7 @@ class Pawn < Piece
   end
 
   def move(x_new, y_new)
+    # return false unless correct_turn?(player)
     return false unless valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
     move_y = move_y(y_new).abs
     move_x = move_x(x_new)
@@ -22,6 +23,7 @@ class Pawn < Piece
     find_and_capture(x_new, y_new)
     update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
     destroy_en_passants
+    game.increment!(:turn)
   end
 
   def forward_move?(y_new)

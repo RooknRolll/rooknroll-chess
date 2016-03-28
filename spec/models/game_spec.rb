@@ -3,11 +3,10 @@ require 'rails_helper'
 RSpec.describe Game, type: :model do
   describe ".with_open_seats" do
     it "should return game with a missing player" do
-      game1 = create(:game, white_player: nil)
       game2 = create(:game, black_player: nil)
       game3 = create(:game)
 
-      expect(Game.with_open_seats).to eq([game1, game2])
+      expect(Game.with_open_seats).to eq([game2])
     end
   end
 
@@ -82,6 +81,39 @@ RSpec.describe Game, type: :model do
         @pawn = create(:pawn, game_id: @game.id, x_coordinate: 3, y_coordinate: 1, color: 'White')
         expect(@game.check?(@king.color)).to eq false
       end
+    end
+  end
+
+  describe 'color_turn method' do
+    before(:each) do
+      @game = create(:game)
+    end
+
+    it 'should return White if the turn column is 0' do
+      expect(@game.color_turn).to eq 'White'
+    end
+
+    it 'should return Black if the turn column is an odd value' do
+      @game.update_attributes(turn: 1)
+      expect(@game.color_turn).to eq 'Black'
+    end
+
+    it 'should return White if the turn column is an even value' do
+      @game.update_attributes(turn: 4)
+      expect(@game.color_turn).to eq 'White'
+    end
+  end
+
+  describe 'player_turn method' do
+    before(:each) do
+      @game = create(:game)
+    end
+
+    it 'should return white_player if color_turn is White' do
+      @game.color_turn
+      @white_player = @game.white_player
+      @black_player = @game.black_player
+      expect(@game.player_turn).to eq @white_player
     end
   end
 

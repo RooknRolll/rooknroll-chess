@@ -7,6 +7,8 @@ RSpec.describe Pawn, type: :model do
       @game.pieces.destroy_all
       @pawn = create(:pawn, game_id: @game.id, x_coordinate: 0, y_coordinate: 1, color: 'White')
       create(:king, game_id: @game.id, x_coordinate: 3, y_coordinate: 0)
+      @white_player = @game.white_player
+      @black_player = @game.black_player
     end
 
     context 'an invalid move' do
@@ -83,8 +85,9 @@ RSpec.describe Pawn, type: :model do
         create(:king, x_coordinate:3, y_coordinate: 7, game_id: @game.id,
                       color: 'Black')
 
-        @pawn.update_attributes(y_coordinate: 4, moved: true)
+        @pawn.update_attributes(y_coordinate: 4, moved: true, color: 'White')
         black_pawn.move(1, 4)
+        @game.update_attributes(turn: 2)
         expect(@pawn.valid_move?(1, 5)).to be true
       end
     end
@@ -107,6 +110,8 @@ RSpec.describe Pawn, type: :model do
       @game = create(:game)
       @black_pawn = @game.pieces.find_by_coordinates(3, 6)
       @white_pawn = @game.pieces.find_by_coordinates(4, 1)
+      @white_player = @game.white_player
+      @black_player = @game.black_player
       @white_pawn.move(4, 3)
       @black_pawn.move(3, 4)
     end

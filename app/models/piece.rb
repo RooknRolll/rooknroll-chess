@@ -31,6 +31,7 @@ class Piece < ActiveRecord::Base
   end
 
   def move(x_new, y_new)
+    return false unless correct_turn?
     return castle!(x_new, y_new) if castling_move?(x_new, y_new)
     if valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
       find_and_capture(x_new, y_new)
@@ -38,6 +39,7 @@ class Piece < ActiveRecord::Base
       # destroy all enpassants on the other side to prevent them from being
       # valid moves in subsequent turns
       destroy_en_passants
+      game.increment!(:turn)
       return true if save
     end
     false
@@ -49,7 +51,6 @@ class Piece < ActiveRecord::Base
     # Determine if move is EnPassant and remove attacked piece from board
     attacked_piece ||= deterimine_en_passant(x_new, y_new)
     attacked_piece && attacked_piece.place_off_board
-
 
     # Remember where the piece came from, so we can put it back.
     old_attributes = { x_coordinate: x_coordinate, y_coordinate: y_coordinate, moved: moved }
@@ -144,6 +145,30 @@ class Piece < ActiveRecord::Base
 
   def destroy_en_passants
     game.en_passants.color(opposite_color).destroy_all
+  end
+
+  def piece_turn?
+    color == game.color_turn
+  end
+
+  def correct_player?
+    player == game.player_turn
+  end
+
+  def correct_turn?
+    piece_turn? && correct_player?
+  end
+
+  def has_valid_moves?
+    game.all_board_spaces.each do |arr|
+      x = arr[0]
+      y = arr[1]
+      if valid_move?(x, y) &&
+         !move_into_check?(x, y)
+        return true
+      end
+    end
+    false
   end
 
   private

@@ -22,13 +22,10 @@ class Pawn < Piece
     create_en_passant if two_spaces_forward?(move_x, move_y)
     id_of_captured_piece ||= attack_any_en_passant(x_new, y_new)
     id_of_captured_piece ||= find_and_capture(x_new, y_new)
-    move_data[:captured_piece] = id_of_captured_piece
     update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
-    move_data[:moved_pieces] = [hash_of_id_and_coordinates]
-    move_data[:success] = true
     destroy_en_passants
     game.increment!(:turn)
-    move_data
+    successful_move_data(id_of_captured_piece, [hash_of_id_and_coordinates])
   end
 
   def forward_move?(y_new)

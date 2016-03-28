@@ -41,11 +41,19 @@ class Piece < ActiveRecord::Base
       # valid moves in subsequent turns
       destroy_en_passants
       game.increment!(:turn)
-      move_data[:success] = true
-      move_data[:moved_pieces] = [(hash_of_id_and_coordinates)]
-      move_data[:captured_piece] = id_of_captured_piece
+      move_data = successful_move_data(id_of_captured_piece, [hash_of_id_and_coordinates])
     end
     move_data
+  end
+
+  def successful_move_data(captured_piece_id, moving_pieces)
+    data = {
+      success: true,
+      captured_piece: captured_piece_id,
+      moved_pieces: moving_pieces,
+      check_status: game.check_status
+    }
+
   end
 
   def move_into_check?(x_new, y_new)
@@ -274,7 +282,8 @@ def initialize_move_data
   data = {
     success: false,
     moved_pieces: [hash_of_id_and_coordinates],
-    captured_piece: nil
+    captured_piece: nil,
+    check_status: game.check_status
   }
   data
 end

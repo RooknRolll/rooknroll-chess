@@ -52,6 +52,17 @@ class Game < ActiveRecord::Base
     pieces.create(player_id: white_player.id, :type => 'Rook', :color => "White", :x_coordinate => 7, :y_coordinate => 0)
   end
 
+  def check_status
+    hash = { black: false, white: false }
+    %w(Black White).each do |color|
+      sym = color == 'Black' ? :black : :white
+      if check?(color)
+        hash[sym] = player_in_checkmate?(color) ? 'checkmate' : 'check'
+      end
+    end
+    hash
+  end
+
   def check?(color)
     king = kings.find_by! color: color
     opponents = pieces.where(color: king.opposite_color)

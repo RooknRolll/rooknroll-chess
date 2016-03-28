@@ -14,12 +14,7 @@ $(document).ready(function(){
   $('.piece').draggable({grid:[59,59], containment: '#chessboard'});
   $('.space').droppable({
     drop: function(event, ui){
-      // This line hides any pieces you capture. Before I added it, capture
-      // attempts looked bad as one piece just sat on top of the other while
-      // the database validated the move.
-      // $(this.children).hide();
       // 'this' refers to the space that you are moving to
-      // console.log(ui);
       var row = $(this).data('row');
       var column = $(this).data('column');
       // Find the id of the dropped piece.
@@ -41,6 +36,8 @@ $(document).ready(function(){
       data: moveObject,
       dataType: 'json'
     });
+    // Empty messages.
+    $('#messages').empty();
     // Once the ajax post is complete, refresh the page.
     // I would like to change this part to something better.
     put.done(function(data){
@@ -55,7 +52,15 @@ $(document).ready(function(){
         // is returned to it's original square.
         $('.piece').css({'left': 0, 'top': 0});
       });
-
+      $.each(data.check_status, function(i, val){
+        // If a check or checkmate is found.
+        if (val) {
+          // Capitalize the first letter.
+          str = i.charAt(0).toUpperCase() + i.slice(1);
+          // Print message to screen.
+          $('#messages').append('<h3>'+str+' player is in '+val+'</h3>')
+        }
+      });
     });
   }
 });

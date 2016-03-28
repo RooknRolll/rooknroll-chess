@@ -19,7 +19,7 @@ $(document).ready(function(){
       // the database validated the move.
       // $(this.children).hide();
       // 'this' refers to the space that you are moving to
-      console.log(ui);
+      // console.log(ui);
       var row = $(this).data('row');
       var column = $(this).data('column');
       // Find the id of the dropped piece.
@@ -44,8 +44,10 @@ $(document).ready(function(){
     // Once the ajax post is complete, refresh the page.
     // I would like to change this part to something better.
     put.done(function(data){
-      // console.log(data);
-      $.each(data.pieces, function(i, val){
+      console.log(data);
+      // Remove any captured_piece from the DOM
+      $('#piece-' + data.captured_piece).detach();
+      $.each(data.moved_pieces, function(i, val){
         console.log(val);
         $('#square-'+val.x_coordinate+'-'+val.y_coordinate).append($('#piece-'+val.id))
         $('.piece').css({'left': 0, 'top': 0});

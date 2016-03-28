@@ -34,7 +34,8 @@ class King < Piece
   end
 
   def castle!(rook_x, rook_y)
-    return false unless can_castle?(rook_x, rook_y)
+    move_data = initialize_move_data
+    return move_data unless can_castle?(rook_x, rook_y)
     # find the rook
     rook = game.pieces.find_by_coordinates(rook_x, rook_y)
     # Decide where the king is moving
@@ -45,6 +46,10 @@ class King < Piece
     update_attributes(x_coordinate: king_x, moved: true)
     # Move the rook.
     rook.update_attributes(x_coordinate: rook_move, moved: true)
-    return true if rook.save && save
+
+    move_data[:success] = true
+    move_data[:moved_pieces] = [hash_of_id_and_coordinates,
+                                rook.hash_of_id_and_coordinates]
+    return move_data if rook.save && save
   end
 end

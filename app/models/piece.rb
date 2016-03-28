@@ -31,8 +31,8 @@ class Piece < ActiveRecord::Base
   end
 
   def move(x_new, y_new)
-    data = initialize_move_data
-    return data unless correct_turn?
+    move_data = initialize_move_data
+    return move_data unless correct_turn?
     return castle!(x_new, y_new) if castling_move?(x_new, y_new)
     if valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
       id_of_captured_piece = find_and_capture(x_new, y_new)
@@ -41,11 +41,11 @@ class Piece < ActiveRecord::Base
       # valid moves in subsequent turns
       destroy_en_passants
       game.increment!(:turn)
-      data[:success] = true
-      data[:moved_pieces] = [(hash_of_id_and_coordinates)]
-      data[:captured_piece] = id_of_captured_piece
+      move_data[:success] = true
+      move_data[:moved_pieces] = [(hash_of_id_and_coordinates)]
+      move_data[:captured_piece] = id_of_captured_piece
     end
-    data
+    move_data
   end
 
   def move_into_check?(x_new, y_new)

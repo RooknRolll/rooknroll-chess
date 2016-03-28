@@ -49,7 +49,10 @@ $(document).ready(function(){
       $('#piece-' + data.captured_piece).detach();
       $.each(data.moved_pieces, function(i, val){
         console.log(val);
+        // This moves any moved pieces to the correct place.
         $('#square-'+val.x_coordinate+'-'+val.y_coordinate).append($('#piece-'+val.id))
+        // This revomes the styling added by the draggable feature, so that a failed move
+        // is returned to it's original square.
         $('.piece').css({'left': 0, 'top': 0});
       });
 

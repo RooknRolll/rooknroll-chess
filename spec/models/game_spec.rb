@@ -190,16 +190,31 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe 'in_stalemate method' do
+  describe 'stalemate? method' do
     before(:each) do
       @game = create(:game)
+      @game.pieces.destroy_all
       @white_player = @game.white_player
       @black_player = @game.black_player
+      @white_king = create(:king, game_id: @game.id, x_coordinate: 7, y_coordinate: 7, color: 'White')
+      @black_queen = create(:queen, game_id: @game.id, x_coordinate: 7, y_coordinate: 6, color: 'Black')
+      # @black_pawn = create(:pawn, game_id: @game.id, x_coordinate: 7, y_coordinate: 5, color: 'Black')
     end
 
-    it "should return if false players still have valid moves" do
+    it "should return false if players still have valid moves" do
       @game.player_has_valid_moves?('White')
-      expect(@game.in_stalemate('White')).to eq false
+      expect(@game.stalemate?('White')).to eq false
+    end
+
+    it "should return false if the player's king is in check" do
+      # white king is in check and it is black turn
+      @game.update_attributes(turn: 5)
+      expect(@game.stalemate?('White')).to eq false
+    end
+
+    it "should return true if not in check but has no valid moves" do
+      @black_queen.update_attributes(x_coordinate: 6, y_coordinate: 5)
+      expect(@game.stalemate?('White')).to eq true
     end
   end
 end

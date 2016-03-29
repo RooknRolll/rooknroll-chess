@@ -108,7 +108,8 @@ class Game < ActiveRecord::Base
     two_d_array
   end
 
-  def in_stalemate(color)
-    return false if player_has_valid_moves?(color)
+  def stalemate?(color)
+    return false if player_has_valid_moves?(color) || check?(color)
+    true
   end
 end

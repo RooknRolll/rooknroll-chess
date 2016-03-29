@@ -107,4 +107,8 @@ class Game < ActiveRecord::Base
     end
     two_d_array
   end
+
+  def in_stalemate(color)
+    return false if player_has_valid_moves?(color)
+  end
 end

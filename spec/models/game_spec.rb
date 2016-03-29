@@ -188,6 +188,18 @@ RSpec.describe Game, type: :model do
         expect(@game.white_player.wins).to eq 1
       end
     end
+  end
 
+  describe 'in_stalemate method' do
+    before(:each) do
+      @game = create(:game)
+      @white_player = @game.white_player
+      @black_player = @game.black_player
+    end
+
+    it "should return if false players still have valid moves" do
+      @game.player_has_valid_moves?('White')
+      expect(@game.in_stalemate('White')).to eq false
+    end
   end
 end

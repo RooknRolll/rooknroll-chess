@@ -56,6 +56,8 @@ RSpec.describe Piece, type: :model do
       @game.pieces.destroy_all
       @white_player = @game.white_player
       @black_player = @game.black_player
+      create(:king, game_id: @game.id, player_id: @white_player.id,
+                    color: 'Black', y_coordinate: 7)
       @bishop = create(:bishop, game_id: @game.id, player_id: @white_player.id)
       @king = create(:king, game_id: @game.id, player_id: @white_player.id,
                             y_coordinate: 0)
@@ -105,7 +107,7 @@ RSpec.describe Piece, type: :model do
       @king.update_attributes(x_coordinate: 3, color: 'White')
       @black_bishop.update_attributes(x_coordinate: 5, y_coordinate: 2)
       @white_bishop.update_attributes(x_coordinate: 3, y_coordinate: 2)
-      expect(@white_bishop.move(2, 3)).to eq false
+      expect(@white_bishop.move(2, 3)[:success]).to eq false
     end
 
     it 'changes the moved attribute to true' do
@@ -155,10 +157,11 @@ RSpec.describe Piece, type: :model do
     #   expect(@white_bishop.move(3, 1)).to eq false
     # end
 
-    it 'returns true if correct_turn? is true and other move conditions are true' do
+    it 'returns a hash with the success key being true if correct_turn? is true
+        and other move conditions are true' do
       @white_player = @game.white_player
       @white_bishop = @game.pieces.find_by_coordinates(2, 0)
-      expect(@white_bishop.move(3, 1)).to eq true
+      expect(@white_bishop.move(3, 1)[:success]).to eq true
     end
   end
 
@@ -169,6 +172,7 @@ RSpec.describe Piece, type: :model do
       @white_player = @game.white_player
       @white_bishop = create(:bishop, player_id: @white_player.id, game_id: @game.id, color: 'White', x_coordinate: 4, y_coordinate: 4)
       create(:king, player_id: @white_player.id, game_id: @game.id, y_coordinate: 0)
+      create(:king, player_id: @game.black_player.id, game_id: @game.id, y_coordinate: 7, color: 'Black')
       @pawn = create(:pawn, color: 'Black', player_id: @game.black_player.id, game_id: @game.id, x_coordinate: 5, y_coordinate: 5)
     end
 

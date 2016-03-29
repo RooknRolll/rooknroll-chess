@@ -11,7 +11,7 @@ $(document).ready(function(){
       $('#results').text('X: ' + left + ' ' + '   Y: ' + top);
       posStack.push({x:left,y:top});
   }
-  $('.piece').draggable({grid:[59,59], containment: '#chessboard'});
+  $('.piece').draggable({grid:[58.5,58.5], containment: '#chessboard'});
   $('.space').droppable({
     drop: function(event, ui){
       // 'this' refers to the space that you are moving to
@@ -38,8 +38,6 @@ $(document).ready(function(){
     });
     // Empty messages.
     $('#messages').empty();
-    // Once the ajax post is complete, refresh the page.
-    // I would like to change this part to something better.
     put.done(function(data){
       console.log(data);
       // Remove any captured_piece from the DOM

@@ -118,4 +118,17 @@ class Game < ActiveRecord::Base
     end
     two_d_array
   end
+
+  def stalemate?(color)
+    return false if player_has_valid_moves?(color) || check?(color)
+    true
+  end
+
+  def over_by_stalemate(color)
+    unless white_player == black_player
+      white_player.increment!(:stalemates)
+      black_player.increment!(:stalemates)
+    end
+    update(game_over: true)
+  end
 end

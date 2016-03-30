@@ -11,10 +11,8 @@ class PiecesController < ApplicationController
     x_move = params[:x_coordinate].to_i
     y_move = params[:y_coordinate].to_i
     move_data = @piece.move(x_move, y_move)
-    pieces = @piece.game.pieces.select('id, type, color, x_coordinate, y_coordinate')
-    data = { status: status, pieces: pieces }
     respond_to do |format|
-      format.html {redirect_to game_path(@piece.game)}
+      format.html { redirect_to game_path(@piece.game) }
       format.json { render json: move_data }
     end
   end

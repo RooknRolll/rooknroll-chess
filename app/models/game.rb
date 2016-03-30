@@ -55,7 +55,7 @@ class Game < ActiveRecord::Base
   def check_status
     hash = { black: false, white: false }
     %w(Black White).each do |color|
-      sym = color == 'Black' ? :black : :white
+      sym = color.downcase.intern
       if check?(color)
         hash[sym] = player_in_checkmate?(color) ? 'checkmate' : 'check'
       end

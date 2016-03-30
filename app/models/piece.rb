@@ -20,14 +20,8 @@ class Piece < ActiveRecord::Base
     # Returns classes html classes that create a glyph of the piece with
     # the correct color.
     glyph_color = color.downcase
-    glyph_type =
-      case type
-      when 'Rook'
-        'tower'
-      else
-        type.downcase
-      end
-    return "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
+    glyph_type = type.downcase
+    "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
   end
 
   def move(x_new, y_new)

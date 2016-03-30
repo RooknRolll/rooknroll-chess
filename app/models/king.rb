@@ -14,10 +14,10 @@ class King < Piece
   def can_castle?(rook_x, rook_y)
     # return false if king has moved
     return false if moved
-    rook = game.pieces.find_by_coordinates(rook_x, rook_y)
+    rook = game.rooks.find_by_coordinates(rook_x, rook_y)
     # return false if there is no piece at the given location,
     # or if that piece is not a rook
-    return false unless rook && rook.type == 'Rook'
+    return false if rook.nil?
     # return false if rook has moved
     return false if rook.moved
     # return false if a piece is in the way

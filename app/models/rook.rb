@@ -11,7 +11,7 @@ class Rook < Piece
     # Returns classes html classes that create a glyph of the piece with
     # the correct color.
     glyph_color = color.downcase
-    "glyphicon glyphicon-'tower' glyph-#{glyph_color} piece"
+    "glyphicon glyphicon-tower glyph-#{glyph_color} piece"
   end
 
 

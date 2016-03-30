@@ -6,6 +6,7 @@ RSpec.describe King, type: :model do
       @game.pieces.destroy_all
       @black_player = @game.black_player
       @king = create(:king, game_id: @game.id)
+      create(:king, color: 'Black', game_id: @game.id, y_coordinate: 7)
     end
 
     it 'makes sure move is on chess board' do
@@ -40,6 +41,7 @@ RSpec.describe King, type: :model do
     before(:each) do
       @game = create(:game)
       @game.pieces.destroy_all
+      create(:king, color: 'Black', game_id: @game.id, y_coordinate: 7)
       @white_player = @game.white_player
       @king = create(:king, player_id: @white_player.id, game_id: @game.id,
                             x_coordinate: 3, y_coordinate: 0)
@@ -141,6 +143,7 @@ RSpec.describe King, type: :model do
     before(:each) do
       @game = create(:game)
       @game.pieces.destroy_all
+      create(:king, color: 'Black', game_id: @game.id, y_coordinate: 7)
       @king = create(:king, game_id: @game.id, x_coordinate: 3, y_coordinate: 0)
       @king_side_rook = create(:rook, game_id: @game.id, x_coordinate: 0,
                                       y_coordinate: 0)

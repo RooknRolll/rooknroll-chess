@@ -1,6 +1,6 @@
 #chessboard {
-  border: 3px solid;
   margin: 5px;
+  padding: 0px;
   height: 480px;
   width: 480px;
   table-layout: fixed;
@@ -51,4 +51,8 @@
   width: 100%;
   font-size: 30px;
   text-align: center;
+}
+
+.border {
+  border: 1px solid #E6193B;
 }

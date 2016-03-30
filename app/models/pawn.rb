@@ -14,16 +14,18 @@ class Pawn < Piece
   end
 
   def move(x_new, y_new)
-    # return false unless correct_turn?(player)
-    return false unless valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
+    move_data = initialize_move_data
+    return move_data unless correct_turn?
+    return move_data unless valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
     move_y = move_y(y_new).abs
     move_x = move_x(x_new)
     create_en_passant if two_spaces_forward?(move_x, move_y)
-    attack_any_en_passant(x_new, y_new)
-    find_and_capture(x_new, y_new)
+    id_of_captured_piece ||= attack_any_en_passant(x_new, y_new)
+    id_of_captured_piece ||= find_and_capture(x_new, y_new)
     update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
     destroy_en_passants
     game.increment!(:turn)
+    successful_move_data(id_of_captured_piece, [hash_of_id_and_coordinates])
   end
 
   def forward_move?(y_new)
@@ -79,6 +81,8 @@ class Pawn < Piece
 
   def attack_any_en_passant(x, y)
     en_passant = game.en_passants.find_by_coordinates(x, y)
+    id_of_captured_piece = en_passant ? en_passant.piece.id : nil
     en_passant && en_passant.capture
+    id_of_captured_piece
   end
 end

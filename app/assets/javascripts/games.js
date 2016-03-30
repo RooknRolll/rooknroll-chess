@@ -11,7 +11,7 @@ $(document).ready(function(){
       $('#results').text('X: ' + left + ' ' + '   Y: ' + top);
       posStack.push({x:left,y:top});
   }
-  $('.piece').draggable({grid:[58.5,58.5], containment: '#chessboard'});
+  $('.piece').draggable({grid:[60, 60], containment: '#chessboard'});
   $('.space').droppable({
     drop: function(event, ui){
       // 'this' refers to the space that you are moving to

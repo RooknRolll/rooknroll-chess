@@ -11,7 +11,6 @@ class Piece < ActiveRecord::Base
   # Adding scope allow calling methods like, Piece.kings, Piece.pawns, Piece.rooks
   # Piece.all, King.all, Pawn.all, Rook.all
   # Note sure if this is necessary but will leave it here for now.
-
   def self.types
     # this is an arry of strings with the name of each piece.
     %w(Pawn Rook Knight Bishop Queen King)
@@ -21,29 +20,34 @@ class Piece < ActiveRecord::Base
     # Returns classes html classes that create a glyph of the piece with
     # the correct color.
     glyph_color = color.downcase
-    glyph_type =
-      case type
-      when 'Rook'
-        'tower'
-      else
-        type.downcase
-      end
-    return "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
+    glyph_type = type.downcase
+    "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
   end
 
   def move(x_new, y_new)
-    return false unless correct_turn?
+    move_data = initialize_move_data
+    return move_data unless correct_turn?
     return castle!(x_new, y_new) if castling_move?(x_new, y_new)
     if valid_move?(x_new, y_new) && !move_into_check?(x_new, y_new)
-      find_and_capture(x_new, y_new)
+      id_of_captured_piece = find_and_capture(x_new, y_new)
       update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
       # destroy all enpassants on the other side to prevent them from being
       # valid moves in subsequent turns
       destroy_en_passants
       game.increment!(:turn)
-      return true if save
+      move_data = successful_move_data(id_of_captured_piece, [hash_of_id_and_coordinates])
     end
-    false
+    move_data
+  end
+
+  def successful_move_data(captured_piece_id, moving_pieces)
+    data = {
+      success: true,
+      captured_piece: captured_piece_id,
+      moved_pieces: moving_pieces,
+      check_status: game.check_status
+    }
+
   end
 
   def move_into_check?(x_new, y_new)
@@ -82,8 +86,11 @@ class Piece < ActiveRecord::Base
 
   def find_and_capture(x, y)
     captured_piece = game.pieces.find_by_coordinates(x, y)
+    # save the captured pieces id
+    id_of_captured_piece = captured_piece ? captured_piece.id : nil
     # This next line checks that a captured piece exists and destroys it.
     captured_piece && captured_piece.destroy
+    id_of_captured_piece
   end
 
   def opposite_color
@@ -172,6 +179,14 @@ class Piece < ActiveRecord::Base
     false
   end
 
+  def hash_of_id_and_coordinates
+    hash = {}
+    hash[:id] = id
+    hash[:x_coordinate] = x_coordinate
+    hash[:y_coordinate] = y_coordinate
+    hash
+  end
+
   private
 
   def castling_move?(x_move, y_move)
@@ -255,4 +270,14 @@ class Piece < ActiveRecord::Base
     end
     intervening_spaces
   end
+end
+
+def initialize_move_data
+  data = {
+    success: false,
+    moved_pieces: [hash_of_id_and_coordinates],
+    captured_piece: nil,
+    check_status: game.check_status
+  }
+  data
 end

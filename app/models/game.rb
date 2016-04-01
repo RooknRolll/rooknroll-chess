@@ -58,6 +58,8 @@ class Game < ActiveRecord::Base
       sym = color.downcase.intern
       if check?(color)
         hash[sym] = player_in_checkmate?(color) ? 'checkmate' : 'check'
+      elsif stalemate?(color)
+        hash[sym] = 'stalemate'
       end
     end
     hash
@@ -117,5 +119,23 @@ class Game < ActiveRecord::Base
       8.times { |y| two_d_array << [x, y] }
     end
     two_d_array
+  end
+
+  def stalemate?(color)
+    color_turn == color && !check?(color) && !player_has_valid_moves?(color)
+  end
+
+  def increment_stalemate(color)
+    unless white_player == black_player
+      white_player.increment!(:stalemates)
+      black_player.increment!(:stalemates)
+    end
+  end
+
+  def over_by_stalemate(color)
+    if stalemate?(color)
+      increment_stalemate(color)
+      update(game_over: true)
+    end
   end
 end

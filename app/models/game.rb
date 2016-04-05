@@ -125,7 +125,7 @@ class Game < ActiveRecord::Base
     color_turn == color && !check?(color) && !player_has_valid_moves?(color)
   end
 
-  def increment_stalemate(color)
+  def increment_stalemate
     unless white_player == black_player
       white_player.increment!(:stalemates)
       black_player.increment!(:stalemates)
@@ -134,7 +134,7 @@ class Game < ActiveRecord::Base
 
   def over_by_stalemate(color)
     if stalemate?(color)
-      increment_stalemate(color)
+      increment_stalemate
       update(game_over: true)
     end
   end

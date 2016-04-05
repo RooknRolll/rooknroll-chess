@@ -256,7 +256,7 @@ RSpec.describe Game, type: :model do
       @game = create(:game)
       @white_player = @game.white_player
       @black_player = @game.black_player
-      @game.increment_stalemate('White')
+      @game.increment_stalemate
       expect(@white_player.stalemates && @black_player.stalemates).to eq 1
     end
   end

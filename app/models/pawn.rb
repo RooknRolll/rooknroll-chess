@@ -29,7 +29,15 @@ class Pawn < Piece
   end
 
   def promote(type)
-    update(type: type) if promotion_valid?
+    if promotion_valid?
+      update(type: type)
+      {
+        success: true,
+        piece: { type: type, id: id }
+      }
+    else
+      { success: false }
+    end
   end
 
   def promotion_valid?

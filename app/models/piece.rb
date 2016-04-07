@@ -282,6 +282,10 @@ class Piece < ActiveRecord::Base
     data
   end
 
+  def promote
+    { success: false }
+  end
+
   def promotion_valid?
     false
   end

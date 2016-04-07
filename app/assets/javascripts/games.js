@@ -58,7 +58,6 @@ $(document).ready(function(){
         }
       });
       if(data.pawn_promotion) {
-        console.log(data.moved_pieces[0].id);
         pawnPromotionDialog(data.moved_pieces[0].id);
       }
     });
@@ -68,20 +67,67 @@ $(document).ready(function(){
     $('#pawn-promotion').dialog({
       text: "OK",
       modal: true,
+      closeOnEscape: false,
+      draggable: false,
+      width: 'auto',
       buttons: [
         {
-          text: 'Queen'
+          text: 'Queen',
+          value: 'Queen',
+          click: function(button){
+            type = button.currentTarget.value;
+            promoteModalButtonClick(type, id);
+          }
         },
         {
-          text: 'Rook'
+          text: 'Rook',
+          value: 'Rook',
+          click: function(button){
+            type = button.currentTarget.value;
+            promoteModalButtonClick(type, id);
+          }
         },
         {
-          text: 'Bishop'
+          text: 'Bishop',
+          value: 'Bishop',
+          click: function(button){
+            type = button.currentTarget.value;
+            promoteModalButtonClick(type, id);
+          }
         },
         {
-          text: 'Knight'
+          text: 'Knight',
+          value: 'Knight',
+          click: function(button){
+            type = button.currentTarget.value;
+            promoteModalButtonClick(type, id);
+          }
         }
       ]
+    });
+  }
+
+  var promoteModalButtonClick = function(val, id) {
+    var url = '/pieces/' + id + '/promote';
+
+    var promotion = $.ajax({
+      method: 'PUT',
+      url: url,
+      data: {type: val},
+      dataType: 'json'
+    });
+    $('#pawn-promotion').dialog('close');
+
+    promotion.done(function(data){
+      var promoteType = data.piece.type;
+      promoteType = promoteType.charAt(0).toLowerCase() + type.slice(1);
+      console.log(promoteType);
+      if(promoteType === 'rook') {
+        promoteType = 'tower';
+      }
+      if(data.success){
+        $('#piece-' + data.piece.id).removeClass('glyphicon-pawn').addClass('glyphicon-' + promoteType);
+      }
     });
   }
 });

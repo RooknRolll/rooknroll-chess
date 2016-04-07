@@ -28,6 +28,15 @@ class Pawn < Piece
     successful_move_data(id_of_captured_piece, [hash_of_id_and_coordinates])
   end
 
+  def promote(type)
+    update(type: type) if promotion_valid?
+  end
+
+  def promotion_valid?
+    (color == 'Black' && y_coordinate == 0) ||
+      (color == 'White' && y_coordinate == 7)
+  end
+
   def forward_move?(y_new)
     move_y = move_y(y_new)
     return false if color == 'White' && move_y <= 0

@@ -44,7 +44,7 @@ $(document).ready(function(){
       $.each(data.moved_pieces, function(i, val){
         // This moves any moved pieces to the correct place.
         $('#square-'+val.x_coordinate+'-'+val.y_coordinate).append($('#piece-'+val.id))
-        // This revomes the styling added by the draggable feature, so that a failed move
+        // This removes the styling added by the draggable feature, so that a failed move
         // is returned to it's original square.
         $('.piece').css({'left': 0, 'top': 0});
       });
@@ -57,7 +57,31 @@ $(document).ready(function(){
           $('#messages').append('<h3>'+str+' player is in '+val+'</h3>')
         }
       });
+      if(data.pawn_promotion) {
+        console.log(data.moved_pieces[0].id);
+        pawnPromotionDialog(data.moved_pieces[0].id);
+      }
+    });
+  }
+
+  var pawnPromotionDialog = function(id) {
+    $('#pawn-promotion').dialog({
+      text: "OK",
+      modal: true,
+      buttons: [
+        {
+          text: 'Queen'
+        },
+        {
+          text: 'Rook'
+        },
+        {
+          text: 'Bishop'
+        },
+        {
+          text: 'Knight'
+        }
+      ]
     });
   }
 });
-

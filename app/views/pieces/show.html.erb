@@ -1,14 +1,15 @@
+<%= javascript_include_tag "pieces" %>
 <table id="chessboard">
-  <% (0..7).each do |row| %>
+  <% square_order_by_color(@game).each do |row| %>
     <tr>
-      <% (0..7).each do |column| %>
+      <% square_order_by_color(@game).each do |column| %>
         <% square_color = (row + column).odd? ? 'black' : 'white' %>
         <% is_chosen_square = chosen == [row, column] ? 'chosen-square' : '' %>
           <td class="<%= square_color %>-space" id="<%= is_chosen_square %>">
             <%= link_to piece_path(@chosen_piece, y_coordinate: row,
               x_coordinate: column), method: :put, class: 'square' do %>
             <% if piece = @game.pieces.find_by_coordinates(column, row) %>
-              <span class="<%= piece.glyph %>" ></span>
+              <span class="<%= piece.glyph %>" id='drag' ></span>
             <% end %>
           <% end %>
         </td>

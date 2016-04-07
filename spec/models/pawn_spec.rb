@@ -5,8 +5,11 @@ RSpec.describe Pawn, type: :model do
     before(:each) do
       @game = create(:game)
       @game.pieces.destroy_all
-      @pawn = create(:pawn, game_id: @game.id, x_coordinate: 0, y_coordinate: 1, color: 'White')
+      create(:king, color: 'Black', game_id: @game.id, x_coordinate: 3, y_coordinate: 7)
+      @pawn = create(:pawn, game_id: @game.id, x_coordinate: 0, y_coordinate: 1)
       create(:king, game_id: @game.id, x_coordinate: 3, y_coordinate: 0)
+      @white_player = @game.white_player
+      @black_player = @game.black_player
     end
 
     context 'an invalid move' do
@@ -79,12 +82,13 @@ RSpec.describe Pawn, type: :model do
         black_pawn = create(:pawn, color: 'Black',
                                    x_coordinate: 1,
                                    y_coordinate: 6,
-                                   game_id: @game.id)
-        create(:king, x_coordinate:3, y_coordinate: 7, game_id: @game.id,
-                      color: 'Black')
+                                   game_id: @game.id,
+                                   player_id: @game.black_player.id)
 
-        @pawn.update_attributes(y_coordinate: 4, moved: true)
+        @pawn.update_attributes(y_coordinate: 4, moved: true, color: 'White')
+        @game.update(turn: 1)
         black_pawn.move(1, 4)
+        @game.update_attributes(turn: 2)
         expect(@pawn.valid_move?(1, 5)).to be true
       end
     end
@@ -105,14 +109,18 @@ RSpec.describe Pawn, type: :model do
   describe 'when capturing' do
     before(:each) do
       @game = create(:game)
+      @black_player = @game.black_player
+      @game.pieces.where(color: 'Black').update_all(player_id: @black_player.id)
       @black_pawn = @game.pieces.find_by_coordinates(3, 6)
       @white_pawn = @game.pieces.find_by_coordinates(4, 1)
+      @white_player = @game.white_player
       @white_pawn.move(4, 3)
       @black_pawn.move(3, 4)
+      @game.update(turn: 3)
+      @black_pawn.reload
     end
     it 'moves the piece to the place where the capture occurs' do
-      @black_pawn.move(4, 3)
-      @black_pawn.reload
+      @black_pawn.move(4,3)
       expect(@game.pieces.find_by_coordinates(4, 3).id).to eq @black_pawn.id
     end
 

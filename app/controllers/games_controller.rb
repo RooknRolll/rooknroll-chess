@@ -23,11 +23,18 @@ class GamesController < ApplicationController
 
   def update
     @game.update(black_player: current_player)
+    @game.pieces.where(color: 'Black').update_all(player_id: current_player.id)
     redirect_to action: :show
   end
 
-  def destroy 
+  def destroy
     @game = Game.find(params[:id])
+    winning_player = if @game.white_player == current_player
+                       black_player
+                     else
+                       white_player
+                     end
+    @game.increment_win_losses(winning_player, current_player)
     @game.destroy
     redirect_to games_path
   end

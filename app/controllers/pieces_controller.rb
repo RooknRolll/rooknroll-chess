@@ -8,15 +8,13 @@ class PiecesController < ApplicationController
 
   def update
     @piece = Piece.find(params[:id])
-    # This unless statement will keep you from making invalid moves. I think
-    # this may break once we revove the interstitial from the movement action.
-    # Also, since only the Bishop and King currently have the valid_move? method
-    # defined movement won't be possible until the method is made for the other
-    # pieces.  Remove this comment when you the other pieces are finished.
     x_move = params[:x_coordinate].to_i
     y_move = params[:y_coordinate].to_i
-    return redirect_to :back unless @piece.move(x_move, y_move)
-    redirect_to game_path(@piece.game)
+    move_data = @piece.move(x_move, y_move)
+    respond_to do |format|
+      format.html { redirect_to game_path(@piece.game) }
+      format.json { render json: move_data }
+    end
   end
 
   private

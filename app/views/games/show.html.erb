@@ -1,25 +1,20 @@
 <table id="chessboard">
-  <% (0..7).each do |row| %>
+  <% square_order_by_color(@game).each do |row| %>
     <tr>
-      <% (0..7).each do |column| %>
+      <% square_order_by_color(@game).each do |column| %>
         <% square_color = (row + column).odd? ? 'black' : 'white' %>
-        <td class="<%= square_color %>-space">
+        <%= content_tag :td, class:"#{square_color}-space space", data: {row: row, column: column}, id: "square-#{column}-#{row}" do %>
           <% if piece = @game.pieces.find_by_coordinates(column, row) %>
-            <%= link_to piece_path(piece) do %>
-              <span class="<%= piece.glyph %>" ></span>
-            <% end %>
+            <%= tag(:span, class: "#{piece.glyph}", data: {piece_id: piece.id}, id: "piece-#{piece.id}") %>
           <% end %>
-        </td>
+        <% end %>
       <% end %>
     </tr>
   <% end %>
 </table>
 
-<% %w(Black White).each do |color| %>
-  <% if @game.check?(color) %>
-    <% check_or_checkmate = @game.player_in_checkmate?(color) ? 'checkmate' : 'check' %>
-    <%= content_tag :h3, "#{color} Player is in #{check_or_checkmate}" %>
-  <% end %>
-<% end %>
+
+<div id='messages'>
+</div>
 
 <%= link_to 'Resign', game_path(@game), method: :delete, data: { confirm: 'Are you sure you want to forfeit?' }, class: 'btn btn-danger' %>

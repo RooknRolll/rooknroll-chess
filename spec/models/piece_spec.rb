@@ -54,8 +54,23 @@ RSpec.describe Piece, type: :model do
     before(:each) do
       @game = create(:game)
       @game.pieces.destroy_all
-      @bishop = create(:bishop, game_id: @game.id)
-      @king = create(:king, game_id: @game.id, y_coordinate: 0)
+      @white_player = @game.white_player
+      @black_player = @game.black_player
+      create(:king, game_id: @game.id, player_id: @white_player.id,
+                    color: 'Black', y_coordinate: 7)
+      @bishop = create(:bishop, game_id: @game.id, player_id: @white_player.id)
+      @king = create(:king, game_id: @game.id, player_id: @white_player.id,
+                            y_coordinate: 0)
+      @game.color_turn
+      @game.player_turn
+      @white_bishop = create(:bishop, game_id: @game.id,
+                                      player_id: @white_player.id,
+                                      color: 'White', x_coordinate: 2,
+                                      y_coordinate: 0)
+      @black_bishop = create(:bishop, game_id: @game.id,
+                                      player_id: @black_player.id,
+                                      color: 'Black', x_coordinate: 2,
+                                      y_coordinate: 7)
     end
     it 'moves the piece to the correct place when move is valid' do
       @bishop.move(5, 5)
@@ -89,13 +104,10 @@ RSpec.describe Piece, type: :model do
 
     it 'does not allow when you are in check and the proposed move would not get
         you out of check' do
-      @king.update_attributes(x_coordinate: 3)
-      create(:knight, x_coordinate: 4, y_coordinate: 2, game_id: @game.id,
-                      color: 'Black')
-      pawn = create(:pawn, x_coordinate: 0, y_coordinate: 1, game_id: @game.id)
-      pawn.move(0, 2)
-      pawn.reload
-      expect(pawn.y_coordinate).to eq 1
+      @king.update_attributes(x_coordinate: 3, color: 'White')
+      @black_bishop.update_attributes(x_coordinate: 5, y_coordinate: 2)
+      @white_bishop.update_attributes(x_coordinate: 3, y_coordinate: 2)
+      expect(@white_bishop.move(2, 3)[:success]).to eq false
     end
 
     it 'changes the moved attribute to true' do
@@ -106,8 +118,10 @@ RSpec.describe Piece, type: :model do
 
     it 'accepts castling as a valid move' do
       @game.pieces.destroy_all
-      @king = create(:king, game_id: @game.id, x_coordinate: 3, y_coordinate: 0)
-      @rook = create(:rook, game_id: @game.id, x_coordinate: 7, y_coordinate: 0)
+      @king = create(:king, game_id: @game.id, player_id: @white_player.id,
+                            x_coordinate: 3, y_coordinate: 0)
+      @rook = create(:rook, game_id: @game.id, player_id: @white_player.id,
+                            x_coordinate: 7, y_coordinate: 0)
       @king.move(7, 0)
       @king.reload
       @rook.reload
@@ -118,27 +132,53 @@ RSpec.describe Piece, type: :model do
     it 'destroys all en passants of the opposite color so that en passants are \
         only valid for one turn' do
       @game = create(:game)
+      @game.pieces.where(color: 'Black').update_all(player_id: @game.black_player.id)
       @white_pawn = @game.pieces.find_by_coordinates(3, 1)
       @black_knight = @game.pieces.find_by_coordinates(1, 7)
       @white_pawn.move(3, 3)
       @black_knight.move(2, 5)
       expect(@game.en_passants).to be_empty
     end
-  end
 
+    it 'increments turn by 1 on a successful move' do
+      @bishop.move(5, 5)
+      expect(@game.reload.turn).to eq 1
+    end
+
+    it 'does not increment turn on an unsuccessful move' do
+      @pawn = create(:pawn, x_coordinate: 3, y_coordinate: 1, game_id: @game.id)
+      @pawn.move(3, 1)
+      expect(@game.reload.turn).to eq 0
+    end
+
+    # it 'returns false if correct_turn? is false' do
+    #   @black_player = @game.black_player
+    #   @white_bishop = @game.pieces.find_by_coordinates(2, 0)
+    #   expect(@white_bishop.move(3, 1)).to eq false
+    # end
+
+    it 'returns a hash with the success key being true if correct_turn? is true
+        and other move conditions are true' do
+      @white_player = @game.white_player
+      @white_bishop = @game.pieces.find_by_coordinates(2, 0)
+      expect(@white_bishop.move(3, 1)[:success]).to eq true
+    end
+  end
 
   describe 'capturing another piece' do
     before(:each) do
       @game = create(:game)
       @game.pieces.destroy_all
-      @bishop = create(:bishop, game_id: @game.id)
-      create(:king, game_id: @game.id, y_coordinate: 0)
-      @pawn = create(:pawn, color: 'Black', game_id: @game.id, x_coordinate: 5, y_coordinate: 5)
+      @white_player = @game.white_player
+      @white_bishop = create(:bishop, player_id: @white_player.id, game_id: @game.id, color: 'White', x_coordinate: 4, y_coordinate: 4)
+      create(:king, player_id: @white_player.id, game_id: @game.id, y_coordinate: 0)
+      create(:king, player_id: @game.black_player.id, game_id: @game.id, y_coordinate: 7, color: 'Black')
+      @pawn = create(:pawn, color: 'Black', player_id: @game.black_player.id, game_id: @game.id, x_coordinate: 5, y_coordinate: 5)
     end
+
     it 'removes the captured piece' do
       pawn_id = @pawn.id
-
-      @bishop.move(5, 5)
+      @white_bishop.move(5, 5)
       expect(Piece.find_by_id(pawn_id)).to be_nil
     end
   end
@@ -164,8 +204,8 @@ RSpec.describe Piece, type: :model do
     end
 
     it 'returns true when moving a non-king piece would put your king in check' do
-      @white_queen.move(3, 1)
-      @black_queen.move(3, 6)
+      @white_queen.update_attributes(x_coordinate: 3, y_coordinate: 1)
+      @black_queen.update_attributes(x_coordinate: 3, y_coordinate: 6)
       expect(@white_queen.move_into_check?(4,1)).to be true
     end
 
@@ -191,6 +231,56 @@ RSpec.describe Piece, type: :model do
         you out of check' do
       create(:knight, x_coordinate: 2, y_coordinate: 5, game_id: @game.id)
       expect(@black_queen.move_into_check?(4, 6)).to be true
+    end
+  end
+
+  describe 'piece_turn? method' do
+    before(:each) do
+      @game = create(:game)
+    end
+
+    it 'should return true if color_turn? is White and piece color is White' do
+      @white_pawn = @game.pieces.find_by_coordinates(0, 1)
+      expect(@white_pawn.piece_turn?).to eq true
+    end
+
+    it 'should return false if the color_turn? is White and the piece color is Black' do
+      @black_pawn = @game.pieces.find_by_coordinates(0, 6)
+      expect(@black_pawn.piece_turn?).to eq false
+    end
+  end
+
+  describe 'correct_player? method' do
+    before(:each) do
+      @game = create(:game)
+      @game.color_turn
+      @white_player = @game.white_player
+      @black_player = @game.black_player
+      @white_pawn = @game.pieces.find_by_coordinates(0, 1)
+    end
+
+    it 'should return true if the player equals player_turn' do
+      expect(@white_pawn.correct_player?).to eq true
+    end
+  end
+
+  describe 'correct_turn? method' do
+    before(:each) do
+      @game = create(:game)
+      @game.color_turn
+      @white_player = @game.white_player
+      @black_player = @game.black_player
+      @game.player_turn
+      @white_pawn = @game.pieces.find_by_coordinates(0, 1)
+      @black_pawn = @game.pieces.find_by_coordinates(0, 6)
+    end
+
+    it 'should return true if piece_turn? and correct_player? are true' do
+      expect(@white_pawn.correct_turn?).to eq true
+    end
+
+    it 'should return false if piece_turn? is false' do
+      expect(@black_pawn.correct_turn?).to eq false
     end
   end
 end

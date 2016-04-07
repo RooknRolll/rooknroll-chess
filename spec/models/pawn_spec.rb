@@ -166,5 +166,10 @@ RSpec.describe Pawn, type: :model do
       @white_pawn.promote('Queen')
       expect(Piece.find(id).class).to eq Queen
     end
+
+    it 'the move method returns a value of true for the pawn_promotion key' do
+      move = @white_pawn.move(0, 7)
+      expect(move[:pawn_promotion]).to be true
+    end
   end
 end

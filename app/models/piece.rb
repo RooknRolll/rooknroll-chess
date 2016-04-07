@@ -41,13 +41,13 @@ class Piece < ActiveRecord::Base
   end
 
   def successful_move_data(captured_piece_id, moving_pieces)
-    data = {
+    {
       success: true,
       captured_piece: captured_piece_id,
       moved_pieces: moving_pieces,
-      check_status: game.check_status
+      check_status: game.check_status,
+      pawn_promotion: promotion_valid?
     }
-
   end
 
   def move_into_check?(x_new, y_new)
@@ -270,14 +270,19 @@ class Piece < ActiveRecord::Base
     end
     intervening_spaces
   end
-end
 
-def initialize_move_data
-  data = {
-    success: false,
-    moved_pieces: [hash_of_id_and_coordinates],
-    captured_piece: nil,
-    check_status: game.check_status
-  }
-  data
+  def initialize_move_data
+    data = {
+      success: false,
+      moved_pieces: [hash_of_id_and_coordinates],
+      captured_piece: nil,
+      check_status: game.check_status,
+      pawn_promotion: false
+    }
+    data
+  end
+
+  def promotion_valid?
+    false
+  end
 end

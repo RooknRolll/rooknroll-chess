@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Rooknroll</title>
-  <%= stylesheet_link_tag    "application", media: "all" %>
-  <%= javascript_include_tag "application" %>
+  <title>Rooknröll</title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -37,10 +37,23 @@
           <li><%= link_to 'Sign out', destroy_player_session_path, :method => :delete %></li>
           <% else %>
           <li><%= link_to 'Sign in', new_player_session_path %></li>
-          <li><%= link_to 'Sign Up', new_player_registration_path %></li>
+          <li><%= link_to 'Sign up', new_player_registration_path %></li>
       <% end %>
         
       </ul>
-    </div>
-  </div>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
 </nav>
+  
+  <% if notice.present? %>
+    <p class="notice"><%= notice %></p>
+  <% end %>
+
+  <% if alert.present? %>
+    <p class="alert"><%= alert %></p>
+  <% end %>
+
+<%= yield %>
+
+</body>
+</html>

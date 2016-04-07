@@ -1,6 +1,6 @@
 #chessboard {
+  border: 3px solid;
   margin: 5px;
-  padding: 0px;
   height: 480px;
   width: 480px;
   table-layout: fixed;
@@ -53,7 +53,6 @@
   text-align: center;
 }
 
-
 .navbar.navbar-inverse {
   border-radius: 0;
   box-shadow: 0px 1px 3px #2a2a2a;
@@ -63,9 +62,10 @@
 .navbar-inverse .navbar-brand {
   color: #F51111;
     font-family: 'judaspriestregular';
-    font-size: 40px;
+    font-size: 35px;
     text-decoration: underline;
     text-shadow: rgba(0,0,0,0.95) 1px 1px;
+    ;
     }
 
 .hero {
@@ -89,14 +89,7 @@ h1, h2, h3, h4, h5, h6, .navbar {
 }
 
 .frosty h1 {
-  font-family: 'judaspriestregular';
+  font-family: "Helvetica Neue", Helvetica;
   font-weight: 50;
   text-shadow: rgba(0,0,0,0.95) 1px 1px;
-  font-size: 75px;
-  }
-
-.frosty h3 {
-  font-family: "Helvetica Neue", Helvetica;
-  text-shadow: rgba(0,0,0,0.95) 1px 1px;
-  font-size: 35px
   }

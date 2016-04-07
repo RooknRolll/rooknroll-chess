@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20160326023936) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "moved",        default: false
+    t.boolean  "valid_move"
   end
 
   create_table "players", force: true do |t|

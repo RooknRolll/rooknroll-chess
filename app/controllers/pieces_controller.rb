@@ -17,10 +17,28 @@ class PiecesController < ApplicationController
     end
   end
 
+  def promote
+    @piece = Piece.find(params[:id])
+    puts params
+    promotion_results = @piece.promote(type_from_params)
+    respond_to do |format|
+      format.html
+      format.json { render json: promotion_results }
+    end
+  end
+
   private
 
   def piece_params
     params.permit(:x_coordinate, :y_coordinate)
+  end
+
+  def type_from_params
+    # To prevent bad data from being placed in the database by people using the
+    # console, require the given type to be in set boundaries. Otherwise, just
+    # assume they want a queen.
+    piece_types = %w(Queen Rook Knight Bishop)
+    piece_types.include?(params[:type]) ? params[:type] : 'Queen'
   end
 
   helper_method :chosen

@@ -130,4 +130,46 @@ RSpec.describe Pawn, type: :model do
       expect(Piece.find_by_id(white_pawn_id)).to be nil
     end
   end
+
+  describe 'when a pawn moves to the end of the board' do
+    before(:each) do
+      @game = create(:game)
+      @black_player = @game.black_player
+      @game.pieces.destroy_all
+      create(:king, game_id: @game.id, player_id: @game.white_player.id,
+                    x_coordinate: 3, y_coordinate: 0)
+      create(:king, game_id: @game.id, player_id: @game.black_player.id,
+                    x_coordinate: 3, y_coordinate: 7, color: 'Black')
+      @white_pawn = create(:pawn, game_id: @game.id, player_id: @game.white_player.id,
+                                  x_coordinate: 0, y_coordinate: 6, moved: true)
+      @black_pawn = create(:pawn, game_id: @game.id, player_id: @game.black_player.id,
+                                  x_coordinate: 0, y_coordinate: 1, moved: true,
+                                  color: 'Black')
+      @white_pawn.reload
+    end
+
+    it 'the pawn#promotion_valid method returns true when a white pawn moves to row 7' do
+      @white_pawn.move(0, 7)
+      expect(@white_pawn.promotion_valid?).to be true
+    end
+
+    it 'the pawn#promotion_valid method returns true when a black pawn moves to row 0' do
+      @game.turn = 1
+      @game.save
+      @black_pawn.move(0, 0)
+      expect(@black_pawn.promotion_valid?).to be true
+    end
+
+    it "the pawn#promote method changes the pawn's class" do
+      @white_pawn.move(0, 7)
+      id = @white_pawn.id
+      @white_pawn.promote('Queen')
+      expect(Piece.find(id).class).to eq Queen
+    end
+
+    it 'the move method returns a value of true for the pawn_promotion key' do
+      move = @white_pawn.move(0, 7)
+      expect(move[:pawn_promotion]).to be true
+    end
+  end
 end

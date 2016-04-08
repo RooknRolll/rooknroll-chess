@@ -80,7 +80,7 @@ $(document).ready(function(){
           text: 'Queen',
           value: 'Queen',
           click: function(button){
-            type = button.currentTarget.value;
+            var type = button.currentTarget.value;
             promoteModalButtonClick(type, id);
           }
         },
@@ -88,7 +88,7 @@ $(document).ready(function(){
           text: 'Rook',
           value: 'Rook',
           click: function(button){
-            type = button.currentTarget.value;
+            var type = button.currentTarget.value;
             promoteModalButtonClick(type, id);
           }
         },
@@ -96,7 +96,7 @@ $(document).ready(function(){
           text: 'Bishop',
           value: 'Bishop',
           click: function(button){
-            type = button.currentTarget.value;
+            var type = button.currentTarget.value;
             promoteModalButtonClick(type, id);
           }
         },
@@ -104,7 +104,7 @@ $(document).ready(function(){
           text: 'Knight',
           value: 'Knight',
           click: function(button){
-            type = button.currentTarget.value;
+            var type = button.currentTarget.value;
             promoteModalButtonClick(type, id);
           }
         }

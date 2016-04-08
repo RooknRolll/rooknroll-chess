@@ -33,10 +33,11 @@ class Pawn < Piece
       update(type: type)
       {
         success: true,
-        piece: { type: type, id: id }
+        piece: { type: type, id: id },
+        check_status: game.check_status
       }
     else
-      { success: false }
+      { success: false, check_status: false }
     end
   end
 

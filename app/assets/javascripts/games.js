@@ -49,18 +49,23 @@ $(document).ready(function(){
         $('.piece').css({'left': 0, 'top': 0});
       });
       $.each(data.check_status, function(i, val){
-        // If a check or checkmate is found.
-        if (val) {
-          // Capitalize the first letter.
-          str = i.charAt(0).toUpperCase() + i.slice(1);
-          // Print message to screen.
-          $('#messages').append('<h3>'+str+' player is in '+val+'</h3>')
-        }
+        addCheckMessages(i, val);
       });
+
       if(data.pawn_promotion) {
         pawnPromotionDialog(data.moved_pieces[0].id);
       }
     });
+  }
+
+  var addCheckMessages = function(i, val){
+    // If a check or checkmate is found.
+    if (val) {
+      // Capitalize the first letter.
+      str = i.charAt(0).toUpperCase() + i.slice(1);
+      // Print message to screen.
+      $('#messages').append('<h3>'+str+' player is in '+val+'</h3>')
+    }
   }
 
   var pawnPromotionDialog = function(id) {
@@ -121,12 +126,15 @@ $(document).ready(function(){
     promotion.done(function(data){
       var promoteType = data.piece.type;
       promoteType = promoteType.charAt(0).toLowerCase() + type.slice(1);
-      console.log(promoteType);
       if(promoteType === 'rook') {
         promoteType = 'tower';
       }
       if(data.success){
         $('#piece-' + data.piece.id).removeClass('glyphicon-pawn').addClass('glyphicon-' + promoteType);
+        $('#messages').empty();
+        $.each(data.check_status, function(i, val){
+          addCheckMessages(i, val);
+        });
       }
     });
   }

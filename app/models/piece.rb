@@ -283,7 +283,7 @@ class Piece < ActiveRecord::Base
   end
 
   def promote
-    { success: false }
+    { success: false, check_status: false}
   end
 
   def promotion_valid?

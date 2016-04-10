@@ -4,6 +4,7 @@ class GamesController < ApplicationController
 
   def index
     @opengames = Game.with_open_seats
+    @game = Game.new
   end
 
   def new

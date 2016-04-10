@@ -13,4 +13,31 @@
   <h4> There are no open games right now.</h4>
 <% end %>
 
-<%= link_to 'Create new game', new_game_path, class: 'btn btn-danger' %>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#newGameModal">Open Modal</button>
+
+
+<!-- Modal -->
+<div id="newGameModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" id="new-game-modal">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create New Game</h4>
+      </div>
+      <div class="modal-body">
+        <p>Enter a name for your game</p>
+        <div class="field">
+          <%= simple_form_for @game do |f| %>
+           <h5> <%= f.label :name %> </h5>
+  			<%= f.text_field :name %>
+  		</div>
+		<% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

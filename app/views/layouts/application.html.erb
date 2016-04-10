@@ -45,15 +45,29 @@
   </div><!-- /.container-fluid -->
 </nav>
   
-  <% if notice.present? %>
-    <p class="notice"><%= notice %></p>
-  <% end %>
+<div class="hero">
+  </br>
+  <div class="frosty col-xs-10 col-xs-offset-1 text-center">
+    <div class="frosty">
+      <div class="hero2">
+      </br>
+        <div class="frosty col-xs-10 col-xs-offset-1 text-center">
+          <div class="frosty">
+            <% if notice.present? %>
+            <p class="notice"><%= notice %></p>
+            <% end %>
 
-  <% if alert.present? %>
-    <p class="alert"><%= alert %></p>
-  <% end %>
+            <% if alert.present? %>
+              <p class="alert"><%= alert %></p>
+            <% end %>
 
-<%= yield %>
-
+            <%= yield %>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+</div>
 </body>
 </html>
+

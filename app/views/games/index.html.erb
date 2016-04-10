@@ -7,4 +7,10 @@
       <%= link_to 'Join Game', game_path(game), method: :put %>
     </p>
   <% end %>
+<% else %>
+  </br>
+  </br>
+  <h4> There are no open games right now.</h4>
 <% end %>
+
+<%= link_to 'Create new game', new_game_path, class: 'btn btn-danger' %>

@@ -1,5 +1,6 @@
+</br>
 <h1>Games Available To Join</h1>
-
+</br>
 <% if @opengames.present? %>
   <% @opengames.each do |game| %>
     <p>
@@ -12,8 +13,8 @@
   </br>
   <h4> There are no open games right now.</h4>
 <% end %>
-
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#newGameModal">Open Modal</button>
+</br>
+<button type="button" class="btn btn-info btn-sm btn-danger" data-toggle="modal" data-target="#newGameModal">Create New Game</button></br>
 
 
 <!-- Modal -->
@@ -33,11 +34,13 @@
            <h5> <%= f.label :name %> </h5>
   			<%= f.text_field :name %>
   		</div>
-		<% end %>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      	<%= f.submit "Create Game", class: 'btn btn-default' %>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <% end %>
       </div>
     </div>
   </div>
 </div>
+</br>

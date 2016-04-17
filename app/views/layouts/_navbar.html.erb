@@ -1,24 +1,29 @@
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <%= link_to 'Rook n Roll', root_path, class: 'navbar-brand' %>
+        <%= link_to 'Rook n Röll', root_path, :class => 'navbar-brand' %>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li><%= link_to 'Games', games_path %></li>
-        <li><%= link_to 'New_Game', new_game_path %></li>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-left">
+        <li>
+          <%= link_to games_path do %>
+      <i class="glyphicon glyphicon-plus-sign"></i>
+      Get Playing!
+    <% end %>
+
+  </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <% if current_player %>
+        <% if player_signed_in? %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= current_player.username %> <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -29,9 +34,10 @@
             </ul>
           </li>
         <% else %>
-          <li><%= link_to 'Sign in', new_player_session_path  %></li>
-          <li><%= link_to 'Sign up', new_player_registration_path %>
+          <li><%= link_to 'Sign in', new_player_session_path %></li>
+          <li><%= link_to 'Sign up', new_player_registration_path %></li>
         <% end %>
+
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

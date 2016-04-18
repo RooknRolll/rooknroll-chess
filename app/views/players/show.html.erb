@@ -1,1 +1,13 @@
-<h1><%= @player.username %></h1>
+<div class="col-md-10 col-md-offset-1">
+  <div class="col-md-6">
+    <h1><%= @player.username %></h1>
+    <h3><b>Wins:</b> <%= @player.wins %></h3>
+    <h3><b>Losses</b> <%= @player.losses %></h3>
+    <h3><b>Stalemates</b> <%= @player.stalemates %></h3>
+  </div>
+  <div class="col-md-6">
+    <% @player.games.each do |game| %>
+      <%= render 'game_container', game: game, player: @player %>
+    <% end %>
+  </div>
+</div>

@@ -11,7 +11,16 @@ $(document).ready(function(){
       $('#results').text('X: ' + left + ' ' + '   Y: ' + top);
       posStack.push({x:left,y:top});
   }
-  $('.piece').draggable({grid:[60, 60], containment: '#chessboard'});
+  function correct_color(){
+    if(data.moveObject.turn !== 'Black'){
+      $('.glyph-white').draggable({grid:[60, 60], containment: '#chessboard'});
+      $('.glyph-black').removeClass('draggable');
+    } else {
+      $('.glyph-black').draggable({grid:[60, 60], containment: '#chessboard'});
+      $('.glyph-white').removeClass('draggable');
+    }
+  }
+  correct_color();
   $('.space').droppable({
     drop: function(event, ui){
       // 'this' refers to the space that you are moving to
@@ -44,9 +53,6 @@ $(document).ready(function(){
       $.each(data.moved_pieces, function(i, val){
         // This moves any moved pieces to the correct place.
         $('#square-'+val.x_coordinate+'-'+val.y_coordinate).append($('#piece-'+val.id))
-        // This removes the styling added by the draggable feature, so that a failed move
-        // is returned to it's original square.
-        $('.piece').css({'left': 0, 'top': 0});
       });
       $.each(data.check_status, function(i, val){
         addCheckMessages(i, val);

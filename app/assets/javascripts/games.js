@@ -11,16 +11,8 @@ $(document).ready(function(){
       $('#results').text('X: ' + left + ' ' + '   Y: ' + top);
       posStack.push({x:left,y:top});
   }
-  function correct_color(){
-    if(data.moveObject.turn !== 'Black'){
-      $('.glyph-white').draggable({grid:[60, 60], containment: '#chessboard'});
-      $('.glyph-black').removeClass('draggable');
-    } else {
-      $('.glyph-black').draggable({grid:[60, 60], containment: '#chessboard'});
-      $('.glyph-white').removeClass('draggable');
-    }
-  }
-  correct_color();
+  
+  $('.glyph-white').draggable({grid:[60, 60], containment: '#chessboard'});
   $('.space').droppable({
     drop: function(event, ui){
       // 'this' refers to the space that you are moving to
@@ -45,6 +37,18 @@ $(document).ready(function(){
       data: moveObject,
       dataType: 'json'
     });
+
+    function correct_color(){
+      if(put.data.turn !== 'Black'){
+        $('.glyph-white').draggable({grid:[60, 60], containment: '#chessboard'});
+        $('.glyph-black').removeClass('draggable');
+      } else {
+        $('.glyph-black').draggable({grid:[60, 60], containment: '#chessboard'});
+        $('.glyph-white').removeClass('draggable');
+      }
+    }
+
+    correct_color();
     // Empty messages.
     $('#messages').empty();
     put.done(function(data){

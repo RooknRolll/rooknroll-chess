@@ -14,4 +14,4 @@ This application was built by:
 Team Project Lead:
 * {Carleton Di Leo}[https://github.com/cbdileo]
 
-{<img src="https://codeship.com/projects/51ac9c50-b26d-0133-4018-4a6e91c1fec7/status?branch=master" alt="Status?branch=master" />}[https://codeship.com/projects/133383]
+{<img src="https://codeship.com/projects/51ac9c50-b26d-0133-4018-4a6e91c1fec7/status?branch=develop" alt="Status?branch=master" />}[https://codeship.com/projects/133383]

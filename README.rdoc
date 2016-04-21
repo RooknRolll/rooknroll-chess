@@ -5,13 +5,13 @@ This is a chess web application built with Ruby on Rails.
 Visit the live website at: http://rooknroll.herokuapp.com
 
 This application was built by:
-* Andrew Brink (https://github.com/abrink27)
-* Nathan Elliott (https://github.com/NathanGE)
-* Cassie Jeon (https://github.com/kasiejun)
-* Trevor Johnson (https://github.com/ATJohnson)
-* Brandon Roberts (https://github.com/dino217)
+* {Andrew Brink}[https://github.com/abrink27]
+* {Nathan Elliott}[https://github.com/NathanGE]
+* {Cassie Jeon}[https://github.com/kasiejun]
+* {Trevor Johnson}[https://github.com/ATJohnson]
+* {Brandon Roberts}[https://github.com/dino217]
 
 Team Project Lead:
-* Carleton Di Leo (https://github.com/cbdileo)
+* {Carleton Di Leo}[https://github.com/cbdileo]
 
 {<img src="https://codeship.com/projects/51ac9c50-b26d-0133-4018-4a6e91c1fec7/status?branch=master" alt="Status?branch=master" />}[https://codeship.com/projects/133383]

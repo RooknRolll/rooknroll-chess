@@ -283,4 +283,13 @@ RSpec.describe Piece, type: :model do
       expect(@black_pawn.correct_turn?).to eq false
     end
   end
+
+  describe 'hash_of_id_and_coordinates' do
+    it 'returns a hash containing the pieces id and coordinates' do
+      king = create(:king, id: 5, x_coordinate: 3, y_coordinate: 0)
+      hash = king.hash_of_id_and_coordinates
+      expected_hash = { id: 5, x_coordinate: 3, y_coordinate: 0 }
+      expect(hash).to eq expected_hash
+    end
+  end
 end

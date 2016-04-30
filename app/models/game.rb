@@ -52,6 +52,10 @@ class Game < ActiveRecord::Base
     pieces.create(player_id: white_player.id, :type => 'Rook', :color => "White", :x_coordinate => 7, :y_coordinate => 0)
   end
 
+  def check_and_turn_status
+    { check_status: check_status, turn: color_turn }
+  end
+
   def check_status
     hash = { black: false, white: false }
     %w(Black White).each do |color|

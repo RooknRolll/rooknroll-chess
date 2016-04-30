@@ -40,6 +40,10 @@ class Piece < ActiveRecord::Base
     move_data
   end
 
+  def game_check_and_turn_status
+    game.check_status
+  end
+
   def successful_move_data(captured_piece_id, moving_pieces)
     {
       success: true,
@@ -181,11 +185,11 @@ class Piece < ActiveRecord::Base
   end
 
   def hash_of_id_and_coordinates
-    hash = {}
-    hash[:id] = id
-    hash[:x_coordinate] = x_coordinate
-    hash[:y_coordinate] = y_coordinate
-    hash
+    {
+      id: id,
+      x_coordinate: x_coordinate,
+      y_coordinate: y_coordinate
+    }
   end
 
   private

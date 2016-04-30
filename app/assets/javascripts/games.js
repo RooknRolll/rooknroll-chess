@@ -3,15 +3,18 @@
 // # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready(function(){
-  var posStack = [];
-  var coordinates = function(element) {
-      element = $(element);
-      var top = element.position().top;
-      var left = element.position().left;
-      $('#results').text('X: ' + left + ' ' + '   Y: ' + top);
-      posStack.push({x:left,y:top});
-  }
   $('.piece').draggable({grid:[60, 60], containment: '#chessboard'});
+
+  var setTurn = function(color){
+    color = color.toLowerCase();
+    var oppositeColors = {
+      'black': 'white',
+      'white': 'black'
+    };
+    $('.glyph-' + color).draggable('enable');
+    $('.glyph-' + oppositeColors[color]).draggable('disable');
+  }
+
   $('.space').droppable({
     drop: function(event, ui){
       // 'this' refers to the space that you are moving to
@@ -44,8 +47,6 @@ $(document).ready(function(){
       $.each(data.moved_pieces, function(i, val){
         // This moves any moved pieces to the correct place.
         $('#square-'+val.x_coordinate+'-'+val.y_coordinate).append($('#piece-'+val.id))
-        // This removes the styling added by the draggable feature, so that a failed move
-        // is returned to it's original square.
         $('.piece').css({'left': 0, 'top': 0});
       });
       $.each(data.check_status, function(i, val){
@@ -55,6 +56,7 @@ $(document).ready(function(){
       if(data.pawn_promotion) {
         pawnPromotionDialog(data.moved_pieces[0].id);
       }
+      setTurn(data.turn);
     });
   }
 

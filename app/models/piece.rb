@@ -46,7 +46,8 @@ class Piece < ActiveRecord::Base
       captured_piece: captured_piece_id,
       moved_pieces: moving_pieces,
       check_status: game.check_status,
-      pawn_promotion: promotion_valid?
+      pawn_promotion: promotion_valid?,
+      turn: game.color_turn
     }
   end
 
@@ -277,7 +278,8 @@ class Piece < ActiveRecord::Base
       moved_pieces: [hash_of_id_and_coordinates],
       captured_piece: nil,
       check_status: game.check_status,
-      pawn_promotion: false
+      pawn_promotion: false,
+      turn: game.color_turn
     }
     data
   end

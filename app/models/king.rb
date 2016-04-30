@@ -52,4 +52,10 @@ class King < Piece
                                 rook.hash_of_id_and_coordinates]
     return move_data if rook.save && save
   end
+
+  private
+
+  def castling_move?(x_move, y_move)
+    can_castle?(x_move, y_move)
+  end
 end

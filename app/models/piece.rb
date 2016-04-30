@@ -194,12 +194,8 @@ class Piece < ActiveRecord::Base
 
   private
 
-  def castling_move?(x_move, y_move)
-    # First, moving piece must be a king.
-    return false unless type == 'King'
-    # Second, king must be able to castle with given coordinates
-    return false unless can_castle?(x_move, y_move)
-    true
+  def castling_move?(_x_move, _y_move)
+    false
   end
 
   def check_for_pieces(coordinate_array)

@@ -83,5 +83,9 @@ RSpec.describe Bishop, type: :model do
       expect(@bishop.can_move_to?(8, 8)).to eq false
       expect(@bishop.can_move_to?(-1, -1)).to eq false
     end
+
+    it 'returns false for non-moves' do
+      expect(@bishop.can_move_to?(3, 3)).to eq false
+    end
   end
 end

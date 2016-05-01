@@ -14,7 +14,7 @@ RSpec.describe GamesController, type: :controller do
     end
 
     it "should show all open games on page" do
-       # @opengames should not be causing errors 
+       # @opengames should not be causing errors
        opengames = create(:game, black_player_id: nil)
        if opengames.present?
         get :index

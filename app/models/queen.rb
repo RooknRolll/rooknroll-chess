@@ -6,4 +6,9 @@ class Queen < Piece
     return false if move_attacking_own_piece?(x_new, y_new, color)
     true
   end
+
+  def possible_moves
+    spaces_horizontal_or_vertical_from_piece |
+      spaces_diagonal_from_piece
+  end
 end

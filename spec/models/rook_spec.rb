@@ -35,4 +35,40 @@ RSpec.describe Rook, type: :model do
         StandardError, 'The given coordinates are not on the board')
     end
   end
+
+  describe 'can_move_to?' do
+    before(:all) do
+      @rook = Rook.create(x_coordinate: 3, y_coordinate: 3)
+    end
+
+    it 'returns true for horizontal moves' do
+      expect(@rook.can_move_to?(0, 3)).to be true
+      expect(@rook.can_move_to?(7, 3)).to be true
+      expect(@rook.can_move_to?(2, 3)).to be true
+      expect(@rook.can_move_to?(4, 3)).to be true
+    end
+
+    it 'returns true for vertical moves' do
+      expect(@rook.can_move_to?(3, 2)).to be true
+      expect(@rook.can_move_to?(3, 4)).to be true
+      expect(@rook.can_move_to?(3, 0)).to be true
+      expect(@rook.can_move_to?(3, 7)).to be true
+    end
+
+    it 'returns false for non horizontal or vertical moves' do
+      expect(@rook.can_move_to?(2, 2)).to be false
+      expect(@rook.can_move_to?(8, 7)).to be false
+      expect(@rook.can_move_to?(5, 2)).to be false
+      expect(@rook.can_move_to?(0, 6)).to be false
+    end
+
+    it 'returns false for moves off the board' do
+      expect(@rook.can_move_to?(3, 8)).to eq false
+      expect(@rook.can_move_to?(-1, 3)).to eq false
+    end
+
+    it 'returns false for non-moves' do
+      expect(@rook.can_move_to?(3, 3)).to eq false
+    end
+  end
 end

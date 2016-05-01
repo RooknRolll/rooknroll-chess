@@ -292,4 +292,20 @@ class Piece < ActiveRecord::Base
     arr = (0..7).to_a
     arr.product(arr)
   end
+
+  def spaces_diagonal_from_piece
+    move_grid.select do |arr|
+      delta_x = (x_coordinate - arr[0]).abs
+      delta_y = (y_coordinate - arr[1]).abs
+      delta_x == delta_y && !(delta_x == 0 && delta_y == 0)
+    end
+  end
+
+  def spaces_horizontal_or_vertical_from_piece
+    move_grid.select do |arr|
+      delta_x = (x_coordinate - arr[0]).abs
+      delta_y = (y_coordinate - arr[1]).abs
+      (delta_x != delta_y) && (delta_x == 0 || delta_y == 0)
+    end
+  end
 end

@@ -14,5 +14,7 @@ class Rook < Piece
     "glyphicon glyphicon-tower glyph-#{glyph_color} piece"
   end
 
-
+  def possible_moves
+    spaces_horizontal_or_vertical_from_piece
+  end
 end

@@ -35,4 +35,48 @@ RSpec.describe Queen, type: :model do
       expect(@queen.valid_move?(4, 7)).to eq false
     end
   end
+
+  describe 'can_move_to?' do
+    before(:all) do
+      @queen = Queen.create(x_coordinate: 3, y_coordinate: 3)
+    end
+
+    it 'returns true for horizontal moves' do
+      expect(@queen.can_move_to?(0, 3)).to be true
+      expect(@queen.can_move_to?(7, 3)).to be true
+      expect(@queen.can_move_to?(2, 3)).to be true
+      expect(@queen.can_move_to?(4, 3)).to be true
+    end
+
+    it 'returns true for vertical moves' do
+      expect(@queen.can_move_to?(3, 2)).to be true
+      expect(@queen.can_move_to?(3, 4)).to be true
+      expect(@queen.can_move_to?(3, 0)).to be true
+      expect(@queen.can_move_to?(3, 7)).to be true
+    end
+
+    it 'returns true for diagonal moves' do
+      expect(@queen.can_move_to?(6, 6)).to eq true
+      expect(@queen.can_move_to?(1, 1)).to eq true
+      expect(@queen.can_move_to?(1, 5)).to eq true
+      expect(@queen.can_move_to?(5, 1)).to eq true
+    end
+
+    it 'returns false for non horizontal, vertical or diagonal moves' do
+      expect(@queen.can_move_to?(4, 5)).to eq false
+      expect(@queen.can_move_to?(6, 5)).to eq false
+      expect(@queen.can_move_to?(0, 2)).to eq false
+    end
+
+    it 'returns false for moves off the board' do
+      expect(@queen.can_move_to?(3, 8)).to eq false
+      expect(@queen.can_move_to?(-1, 3)).to eq false
+      expect(@queen.can_move_to?(8, 8)).to eq false
+      expect(@queen.can_move_to?(-1, -1)).to eq false
+    end
+
+    it 'returns false for non-moves' do
+      expect(@queen.can_move_to?(3, 3)).to eq false
+    end
+  end
 end

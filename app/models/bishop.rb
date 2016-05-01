@@ -12,10 +12,6 @@ class Bishop < Piece
   private
 
   def possible_moves
-    move_grid.select do |arr|
-      delta_x = (x_coordinate - arr[0]).abs
-      delta_y = (y_coordinate - arr[1]).abs
-      delta_x == delta_y
-    end
+    spaces_diagonal_from_piece
   end
 end

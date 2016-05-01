@@ -59,4 +59,29 @@ RSpec.describe Bishop, type: :model do
       expect(@bishop.valid_move?(7, 2)).to be true
     end
   end
+
+  describe 'can_move_to?' do
+    before(:all) do
+      @bishop = Bishop.create(x_coordinate: 3, y_coordinate: 3)
+    end
+
+    it 'returns true for diagonal moves' do
+      expect(@bishop.can_move_to?(6, 6)).to eq true
+      expect(@bishop.can_move_to?(1, 1)).to eq true
+      expect(@bishop.can_move_to?(1, 5)).to eq true
+      expect(@bishop.can_move_to?(5, 1)).to eq true
+    end
+
+    it 'returns false for non- diagonal moves' do
+      expect(@bishop.can_move_to?(6, 3)).to eq false
+      expect(@bishop.can_move_to?(3, 6)).to eq false
+      expect(@bishop.can_move_to?(4, 5)).to eq false
+      expect(@bishop.can_move_to?(1, 6)).to eq false
+    end
+
+    it 'returns false for moves off the board' do
+      expect(@bishop.can_move_to?(8, 8)).to eq false
+      expect(@bishop.can_move_to?(-1, -1)).to eq false
+    end
+  end
 end

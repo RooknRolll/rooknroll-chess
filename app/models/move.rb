@@ -10,7 +10,7 @@ class Move
   end
 
   def valid?
-    piece.valid_move?(x_coordinate, y_coordinate)
+    piece.can_move_to?(x_coordinate, y_coordinate)
   end
 
   protected

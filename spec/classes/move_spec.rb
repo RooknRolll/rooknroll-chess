@@ -3,12 +3,10 @@ require 'rails_helper'
 RSpec.describe Move, type: :class do
   before(:each) do
     @king = double
-    status_hash = { check: false, turn: 'Black' }
+    status_hash = { check_status: { black: false, white: false }, turn: 'White' }
+    @king_hash = { id: 5, x_coordinate: 2, y_coordinate: 1 }
     allow(@king).to receive(:hash_of_id_and_coordinates) do
-      {
-        id: 5,
-        x_coordinate: 2,
-        y_coordinate: 1 }
+      @king_hash
     end
     allow(@king).to receive(:game_check_and_turn_status) { status_hash }
   end
@@ -36,8 +34,8 @@ RSpec.describe Move, type: :class do
         moved_pieces: [{ id: 5, x_coordinate: 2, y_coordinate: 1 }],
         captured_piece: nil,
         pawn_promotion: false,
-        check: false,
-        turn: 'Black'
+        check_status: { black: false, white: false },
+        turn: 'White'
       }
       expect(@move.data).to eq expected_hash
     end

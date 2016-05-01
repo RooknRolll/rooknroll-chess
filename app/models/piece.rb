@@ -24,6 +24,10 @@ class Piece < ActiveRecord::Base
     "glyphicon glyphicon-#{glyph_type} glyph-#{glyph_color} piece"
   end
 
+  def can_move_to?(x_move, y_move)
+    possible_moves.include?([x_move, y_move])
+  end
+
   def move(x_new, y_new)
     move_data = initialize_move_data
     return move_data unless correct_turn?
@@ -40,7 +44,7 @@ class Piece < ActiveRecord::Base
   end
 
   def game_check_and_turn_status
-    game.check_status
+    game.check_and_turn_status
   end
 
   def successful_move_data(captured_piece_id, moving_pieces)
@@ -48,7 +52,7 @@ class Piece < ActiveRecord::Base
       success: true,
       captured_piece: captured_piece_id,
       moved_pieces: moving_pieces,
-      check_status: game.check_status,
+      check_status: { check: game.check_status },
       pawn_promotion: promotion_valid?,
       turn: game.color_turn
     }
@@ -182,6 +186,10 @@ class Piece < ActiveRecord::Base
 
   private
 
+  def possible_moves
+    []
+  end
+
   def castling_move?(_x_move, _y_move)
     false
   end
@@ -278,5 +286,10 @@ class Piece < ActiveRecord::Base
 
   def promotion_valid?
     false
+  end
+
+  def move_grid
+    arr = (0..7).to_a
+    arr.product(arr)
   end
 end

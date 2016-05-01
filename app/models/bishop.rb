@@ -8,4 +8,14 @@ class Bishop < Piece
     return false if move_attacking_own_piece?(x_new, y_new, color)
     true
   end
+
+  private
+
+  def possible_moves
+    move_grid.select do |arr|
+      delta_x = (x_coordinate - arr[0]).abs
+      delta_y = (y_coordinate - arr[1]).abs
+      delta_x == delta_y
+    end
+  end
 end

@@ -142,4 +142,15 @@ class Game < ActiveRecord::Base
       update(game_over: true)
     end
   end
+
+  def next_turn!
+    increment!(:turn)
+    destroy_en_passants
+  end
+
+  private
+
+  def destroy_en_passants
+    en_passants.of_color(color_turn).destroy_all
+  end
 end

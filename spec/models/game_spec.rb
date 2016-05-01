@@ -11,10 +11,36 @@ RSpec.describe Game, type: :model do
   end
 
   describe "populate_board!" do
-  	it "should populate all the pieces" do
-  	  ng = create(:game)
-      expect(ng.pieces.count).to eq(32)
-  	end
+    it "should populate all the pieces" do
+      new_game = create(:game)
+      expect(new_game.pieces.count).to eq(32)
+    end
+  end
+
+  describe 'next_turn!' do
+    before(:each) do
+      @game = create(:game)
+    end
+    it 'increments the turn' do
+      initial_turn = @game.turn
+      @game.next_turn!
+      @game.reload
+      expect(@game.turn).to eq(initial_turn + 1)
+    end
+
+    it 'destroys enpassants of the color to which the next turn belongs' do
+      @game.en_passants.create(x_coordinate: 2, y_coordinate: 2, color: 'Black')
+      @game.next_turn!
+      @game.reload
+      expect(@game.en_passants.any?).to be false
+    end
+
+    it 'does not destroy enpassants of the color that just moved' do
+      @game.en_passants.create(x_coordinate: 2, y_coordinate: 2, color: 'White')
+      @game.next_turn!
+      @game.reload
+      expect(@game.en_passants.any?).to be true
+    end
   end
 
   describe "check?" do

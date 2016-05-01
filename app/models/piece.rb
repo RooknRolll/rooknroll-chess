@@ -33,8 +33,7 @@ class Piece < ActiveRecord::Base
       update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
       # destroy all enpassants on the other side to prevent them from being
       # valid moves in subsequent turns
-      destroy_en_passants
-      game.increment!(:turn)
+      game.next_turn!
       move_data = successful_move_data(id_of_captured_piece, [hash_of_id_and_coordinates])
     end
     move_data
@@ -108,15 +107,8 @@ class Piece < ActiveRecord::Base
     end
   end
 
-  def valid_move?(x_new, y_new)
-    # # I pulled out the portions of the valid move method that all piece types
-    # # should be calling, and placed them here. Check the bishop model to see
-    # # how to call it.
-    # return false unless actual_move?(x_new, y_new)
-    # puts "actual_move passed"
-    # return false if move_attacking_own_piece?(x_new, y_new, color)
-    # puts "move_attacking_own_piece passed"
-    # true
+  def valid_move?(_x_new, _y_new)
+    false
   end
 
   def self.find_by_coordinates(column, row)
@@ -154,10 +146,6 @@ class Piece < ActiveRecord::Base
 
   def actual_move?(x_move, y_move)
     x_move != x_coordinate && y_move != y_coordinate
-  end
-
-  def destroy_en_passants
-    game.en_passants.color(opposite_color).destroy_all
   end
 
   def piece_turn?
@@ -285,7 +273,7 @@ class Piece < ActiveRecord::Base
   end
 
   def promote
-    { success: false, check_status: false}
+    { success: false, check_status: false }
   end
 
   def promotion_valid?

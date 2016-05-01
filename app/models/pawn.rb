@@ -23,8 +23,7 @@ class Pawn < Piece
     id_of_captured_piece ||= attack_any_en_passant(x_new, y_new)
     id_of_captured_piece ||= find_and_capture(x_new, y_new)
     update_attributes(x_coordinate: x_new, y_coordinate: y_new, moved: true)
-    destroy_en_passants
-    game.increment!(:turn)
+    game.next_turn!
     successful_move_data(id_of_captured_piece, [hash_of_id_and_coordinates])
   end
 

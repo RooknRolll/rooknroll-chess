@@ -1,0 +1,5 @@
+<div class="game-container">
+  <h2><%= link_to game.name, game_path(game) %></h4>
+  <h3><b>Started at:</b> <%= game.started_at %></h3>
+  <h3><b>Playing against:</b> <%= game.other_player_name(player) || 'Nobody yet' %></h3>
+</div>

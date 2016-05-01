@@ -138,4 +138,14 @@ class Game < ActiveRecord::Base
       update(game_over: true)
     end
   end
+
+  def started_at
+    created_at.strftime('%I:%M %p, %-m/%-d/%Y')
+  end
+
+  def other_player_name(player)
+    other = black_player if player == white_player
+    other = white_player if player == black_player
+    other.nil? ? false : other.username
+  end
 end

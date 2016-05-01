@@ -144,7 +144,8 @@ class Game < ActiveRecord::Base
   end
 
   def other_player_name(player)
-    black_player.username if player == white_player
-    white_player.username if player == black_player
+    other = black_player if player == white_player
+    other = white_player if player == black_player
+    other.nil? ? false : other.username
   end
 end

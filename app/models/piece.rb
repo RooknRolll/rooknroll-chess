@@ -308,4 +308,12 @@ class Piece < ActiveRecord::Base
       (delta_x != delta_y) && (delta_x == 0 || delta_y == 0)
     end
   end
+
+  def spaces_one_space_away_from_piece
+    move_grid.select do |arr|
+      delta_x = (x_coordinate - arr[0]).abs
+      delta_y = (y_coordinate - arr[1]).abs
+      delta_x <= 1 && delta_y <= 1 && !(delta_x == 0 && delta_y == 0)
+    end
+  end
 end

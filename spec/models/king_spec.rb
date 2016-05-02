@@ -167,4 +167,28 @@ RSpec.describe King, type: :model do
       expect(@queen_side_rook.x_coordinate).to eq 4
     end
   end
+
+  describe 'can_move_to?' do
+    before(:each) do
+      @king = King.create(x_coordinate: 3, y_coordinate: 3)
+    end
+
+    it 'returns true for move one space away' do
+      expect(@king.can_move_to?(3, 2)).to be true
+      expect(@king.can_move_to?(2, 2)).to be true
+      expect(@king.can_move_to?(4, 3)).to be true
+      expect(@king.can_move_to?(4, 4)).to be true
+    end
+
+    it 'returns false for moves off the board' do
+      @king.update(x_coordinate: 0, y_coordinate: 7)
+      expect(@king.x_coordinate).to eq 0
+      expect(@king.can_move_to?(-1, 7)).to eq false
+      expect(@king.can_move_to?(0, 8)).to eq false
+    end
+
+    it 'returns false for non-moves' do
+      expect(@king.can_move_to?(3, 3)).to eq false
+    end
+  end
 end

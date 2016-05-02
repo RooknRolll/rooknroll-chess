@@ -58,4 +58,8 @@ class King < Piece
   def castling_move?(x_move, y_move)
     can_castle?(x_move, y_move)
   end
+
+  def possible_moves
+    spaces_one_space_away_from_piece
+  end
 end

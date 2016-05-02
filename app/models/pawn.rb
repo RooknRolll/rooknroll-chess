@@ -102,4 +102,31 @@ class Pawn < Piece
     en_passant && en_passant.capture
     id_of_captured_piece
   end
+
+  private
+
+  def possible_moves
+    (one_space_in_front_of_pawn |
+      spaces_one_diagonal_in_front_of_pawn |
+      two_spaces_forward_if_pawn_has_not_moved) &
+      move_grid
+  end
+
+  def spaces_one_diagonal_in_front_of_pawn
+    [[x_coordinate - 1, forward_by_number_of_spaces(1)],
+     [x_coordinate + 1, forward_by_number_of_spaces(1)]]
+  end
+
+  def one_space_in_front_of_pawn
+    [[x_coordinate, forward_by_number_of_spaces(1)]]
+  end
+
+  def two_spaces_forward_if_pawn_has_not_moved
+    moved ? [] : [[x_coordinate, forward_by_number_of_spaces(2)]]
+  end
+
+  def forward_by_number_of_spaces(num)
+    direction_modifier = { 'White' => 1, 'Black' => -1 }
+    y_coordinate + num * direction_modifier[color]
+  end
 end

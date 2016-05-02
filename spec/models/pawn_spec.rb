@@ -172,4 +172,63 @@ RSpec.describe Pawn, type: :model do
       expect(move[:pawn_promotion]).to be true
     end
   end
+
+  describe 'can_move_to?' do
+    before(:each) do
+      @white_pawn = Pawn.create(x_coordinate: 3, y_coordinate: 1,
+                                moved: false, color: 'White')
+      @black_pawn = Pawn.create(x_coordinate: 3, y_coordinate: 6,
+                                moved: false, color: 'Black')
+    end
+
+    it 'returns true when moving one space forward' do
+      expect(@white_pawn.can_move_to?(3, 2)).to be true
+      expect(@black_pawn.can_move_to?(3, 5)).to be true
+    end
+
+    it 'returns true when moving one space diagonally' do
+      expect(@white_pawn.can_move_to?(4, 2)).to be true
+      expect(@white_pawn.can_move_to?(2, 2)).to be true
+      expect(@black_pawn.can_move_to?(4, 5)).to be true
+      expect(@black_pawn.can_move_to?(2, 5)).to be true
+    end
+
+    it 'returns false when moving backwards' do
+      expect(@white_pawn.can_move_to?(3, 0)).to be false
+      expect(@black_pawn.can_move_to?(3, 7)).to be false
+    end
+
+    it 'returns false when moving sideways' do
+      expect(@white_pawn.can_move_to?(2, 1)).to be false
+      expect(@black_pawn.can_move_to?(4, 6)).to be false
+    end
+
+    it 'returns false when moving off the board' do
+      @white_pawn.update(x_coordinate: 0)
+      @black_pawn.update(y_coordinate: 7, x_coordinate: 7)
+      expect(@white_pawn.can_move_to?(-1, 2)).to be false
+      expect(@black_pawn.can_move_to?(7, 8)).to be false
+    end
+
+    context 'when the pawn has not moved' do
+      it 'returns true when moving forward two spaces' do
+        expect(@white_pawn.can_move_to?(3, 3)).to eq true
+        expect(@black_pawn.can_move_to?(3, 4)).to be true
+      end
+    end
+
+    context 'when the pawn has moved' do
+      before(:each) do
+        @white_pawn = Pawn.create(x_coordinate: 3, y_coordinate: 2,
+                                  moved: true, color: 'White')
+        @black_pawn = Pawn.create(x_coordinate: 3, y_coordinate: 5,
+                                  moved: true, color: 'Black')
+      end
+      it 'returns false when moving forward two spaces' do
+        expect(@white_pawn.y_coordinate).to eq 2
+        expect(@white_pawn.can_move_to?(3, 4)).to eq false
+        expect(@black_pawn.can_move_to?(3, 3)).to be false
+      end
+    end
+  end
 end
